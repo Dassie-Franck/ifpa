@@ -13,15 +13,17 @@ import { Link as RouterLink } from 'react-router-dom';
 // Données statiques temporaires — seront remplacées par l'API Laravel (/api/v1/actualites)
 const articles = [
   {
-    image: '/assets/actualites/actu-1.jpg',
+    image: '/assets/evenements/evenement1.png',
     title: 'Journée portes ouvertes sur le campus',
     link: '/actualites/journee-portes-ouvertes',
   },
   {
-    image: '/assets/actualites/actu-2.jpg',
+    image: '/assets/evenements/evenement2.png',
     title: "Retour d'expérience d'une ancienne diplômée",
     link: '/actualites/retour-experience-diplomee',
   },
+  
+   
 ];
 
 function LatestNews() {
@@ -191,20 +193,34 @@ function LatestNews() {
 
           <Grid size={{ xs: 12, md: 6 }}>
 
-            <Box
-              component={RouterLink}
-              to="/institut"
-              sx={{
-                display: 'block',
-                height: 260,
-                backgroundImage:
-                  'url(/assets/actualites/banniere-accreditation.jpg)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                borderRadius: 1,
-                border: '1px solid #eee',
-              }}
-            />
+           <Box
+  sx={{
+    height: 260,
+    borderRadius: 1,
+    border: '1px solid #eee',
+    overflow: 'hidden',
+    position: 'relative',
+    bgcolor: '#000',
+  }}
+>
+  <video
+    controls
+    muted
+    autoPlay
+    loop
+    playsInline
+    style={{
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+    }}
+  >
+    <source src="/assets/evenements/back-to-school.mp4" type="video/mp4" />
+    {/* Ajoutez d'autres formats si nécessaire */}
+    <source src="/assets/evenements/video.webm" type="video/webm" />
+    Votre navigateur ne supporte pas la lecture de vidéos.
+  </video>
+</Box>
 
           </Grid>
 

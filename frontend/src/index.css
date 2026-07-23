@@ -3,3 +3,18 @@
   padding: 0;
   box-sizing: border-box;
 }
+.ifpa-phone-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+}
+.ifpa-phone-input input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 0.9rem;
+  font-family: inherit;
+}

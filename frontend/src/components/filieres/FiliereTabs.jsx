@@ -42,6 +42,7 @@ function FiliereTabs({ value, onChange }) {
           </Tabs>
         </Container>
       </Box>
+      
     </motion.div>
   );
 }

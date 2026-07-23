@@ -4,14 +4,14 @@ import { Link as RouterLink } from 'react-router-dom';
 // Données statiques temporaires — seront remplacées par l'API Laravel (/api/v1/evenements)
 const events = [
   {
-    image: '/assets/evenements/evenement-1.jpg',
+    image: '/assets/evenements/evenement1.png',
     lieu: 'Campus Principal',
-    date: '06 Oct',
+    date: '16 Oct',
     title: 'Rentrée des nouveaux étudiants',
     link: '/vie-au-campus/rentree-2026',
   },
   {
-    image: '/assets/evenements/evenement-2.jpg',
+    image: '/assets/evenements/evenement2.png',
     lieu: 'Campus Principal',
     date: '15 Sep',
     title: "Journée portes ouvertes — Filières paramédicales",

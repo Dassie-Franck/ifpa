@@ -3,7 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 
 function AdmissionBanner() {
   return (
-    <Box sx={{ bgcolor: 'secondary.main', py: 2.5 }}>
+    <Box sx={{ bgcolor: 'warning.main', py: 2.5 }}>
       <Container maxWidth="lg">
         <Stack
           direction={{ xs: 'column', sm: 'row' }}
@@ -23,7 +23,7 @@ function AdmissionBanner() {
             variant="contained"
             sx={{
               bgcolor: '#fff',
-              color: 'secondary.main',
+              color: 'warning.main',
               fontWeight: 700,
               px: 3,
               '&:hover': { bgcolor: '#f0f0f0' },

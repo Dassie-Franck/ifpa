@@ -38,7 +38,7 @@ function InscriptionHero() {
           <Button
             component={HashLink}
             smooth
-            to="#prerequis"
+            to="/inscription/selection"
             variant="contained"
             color="primary"
             size="large"

@@ -61,7 +61,7 @@ function AdmissionIntro() {
             >
               <Button
                 component={RouterLink}
-                to="/admission/inscription"
+                to="/inscription/selection"
                 variant="contained"
                 endIcon={<ArrowForwardIcon />}
                 sx={{ mt: 3, fontWeight: 700 }}

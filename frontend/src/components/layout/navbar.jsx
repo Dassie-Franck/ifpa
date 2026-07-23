@@ -13,6 +13,7 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  Collapse,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import TwitterIcon from '@mui/icons-material/Twitter';
@@ -20,7 +21,9 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { Link as RouterLink } from 'react-router-dom';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 // Bandeau secondaire (au-dessus du header) - §7.2 du cahier des charges
 const topBarLinks = [
@@ -39,8 +42,8 @@ const mainNavLinks = [
     path: '/institut',
     subLinks: [
       { label: 'Qui sommes-nous ?', path: '/institut/qui-sommes-nous' },
-      { label: 'Nos approches pédagogiques', path: '/institut/approches-pedagogiques' },
-      { label: 'Nos équipes', path: '/institut/equipes' },
+      { label: 'Nos approches pédagogiques', path: '/institut/pedagogicalApproach' },
+      { label: 'Nos équipes', path: '/institut/nos-equipes' },
       { label: 'Espace presse', path: '/institut/espace-presse' },
     ],
   },
@@ -66,9 +69,11 @@ const mainNavLinks = [
 ];
 
 function Navbar() {
+  const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileSubMenuOpen, setMobileSubMenuOpen] = useState({});
 
   const handleOpenSubMenu = (event, label) => {
     setAnchorEl(event.currentTarget);
@@ -78,6 +83,22 @@ function Navbar() {
   const handleCloseSubMenu = () => {
     setAnchorEl(null);
     setOpenSubMenu(null);
+  };
+
+  const handleMobileSubMenuToggle = (label) => {
+    setMobileSubMenuOpen(prev => ({
+      ...prev,
+      [label]: !prev[label]
+    }));
+  };
+
+  // Vérifie si un lien est actif (exact ou chemin parent)
+  const isActive = (path) => {
+    if (path === '/') {
+      return location.pathname === path;
+    }
+    // Pour les sous-menus, on vérifie si le chemin commence par le path
+    return location.pathname.startsWith(path);
   };
 
   return (
@@ -113,6 +134,8 @@ function Navbar() {
                     textDecoration: 'none',
                     fontSize: '0.8rem',
                     fontWeight: 500,
+                    borderBottom: isActive(link.path) ? '2px solid #ff0000' : '2px solid transparent',
+                    paddingBottom: '2px',
                   }}
                 >
                   {link.label}
@@ -154,6 +177,11 @@ function Navbar() {
                         fontSize: '0.8rem',
                         fontWeight: 600,
                         px: 1.2,
+                        borderBottom: isActive(link.path) ? '3px solid #ff0000' : '3px solid transparent',
+                        borderRadius: 0,
+                        '&:hover': {
+                          borderBottom: '3px solid #ff0000',
+                        },
                       }}
                     >
                       {link.label}
@@ -169,6 +197,12 @@ function Navbar() {
                           component={RouterLink}
                           to={sub.path}
                           onClick={handleCloseSubMenu}
+                          sx={{
+                            backgroundColor: isActive(sub.path) ? 'rgba(255, 0, 0, 0.08)' : 'transparent',
+                            '&:hover': {
+                              backgroundColor: 'rgba(255, 0, 0, 0.04)',
+                            },
+                          }}
                         >
                           {sub.label}
                         </MenuItem>
@@ -185,6 +219,11 @@ function Navbar() {
                       fontSize: '0.8rem',
                       fontWeight: 600,
                       px: 1.2,
+                      borderBottom: isActive(link.path) ? '3px solid #ff0000' : '3px solid transparent',
+                      borderRadius: 0,
+                      '&:hover': {
+                        borderBottom: '3px solid #ff0000',
+                      },
                     }}
                   >
                     {link.label}
@@ -205,13 +244,79 @@ function Navbar() {
         </Container>
       </AppBar>
 
-      {/* Menu mobile */}
+      {/* Menu mobile avec sous-menus */}
       <Drawer anchor="right" open={mobileOpen} onClose={() => setMobileOpen(false)}>
         <Box sx={{ width: 280 }} role="presentation">
           <List>
-            {[...mainNavLinks, ...topBarLinks].map((link) => (
+            {/* Liens principaux avec sous-menus */}
+            {mainNavLinks.map((link) => (
+              <Box key={link.path}>
+                {link.subLinks ? (
+                  <>
+                    <ListItem disablePadding>
+                      <ListItemButton 
+                        onClick={() => handleMobileSubMenuToggle(link.label)}
+                        sx={{
+                          borderLeft: isActive(link.path) ? '4px solid #ff0000' : '4px solid transparent',
+                        }}
+                      >
+                        <ListItemText primary={link.label} />
+                        {mobileSubMenuOpen[link.label] ? <ExpandLess /> : <ExpandMore />}
+                      </ListItemButton>
+                    </ListItem>
+                    <Collapse in={mobileSubMenuOpen[link.label]} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding>
+                        {link.subLinks.map((sub) => (
+                          <ListItem 
+                            key={sub.path} 
+                            disablePadding
+                            onClick={() => setMobileOpen(false)}
+                          >
+                            <ListItemButton 
+                              component={RouterLink} 
+                              to={sub.path}
+                              sx={{ 
+                                pl: 4,
+                                borderLeft: isActive(sub.path) ? '4px solid #ff0000' : '4px solid transparent',
+                                backgroundColor: isActive(sub.path) ? 'rgba(255, 0, 0, 0.08)' : 'transparent',
+                              }}
+                            >
+                              <ListItemText primary={sub.label} />
+                            </ListItemButton>
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Collapse>
+                  </>
+                ) : (
+                  <ListItem disablePadding onClick={() => setMobileOpen(false)}>
+                    <ListItemButton 
+                      component={RouterLink} 
+                      to={link.path}
+                      sx={{
+                        borderLeft: isActive(link.path) ? '4px solid #ff0000' : '4px solid transparent',
+                      }}
+                    >
+                      <ListItemText primary={link.label} />
+                    </ListItemButton>
+                  </ListItem>
+                )}
+              </Box>
+            ))}
+
+            {/* Séparateur */}
+            <Box sx={{ borderTop: '1px solid #ddd', my: 1 }} />
+
+            {/* Liens de la barre supérieure */}
+            {topBarLinks.map((link) => (
               <ListItem key={link.path} disablePadding onClick={() => setMobileOpen(false)}>
-                <ListItemButton component={RouterLink} to={link.path}>
+                <ListItemButton 
+                  component={RouterLink} 
+                  to={link.path}
+                  sx={{
+                    borderLeft: isActive(link.path) ? '4px solid #ff0000' : '4px solid transparent',
+                  }}
+                >
                   <ListItemText primary={link.label} />
                 </ListItemButton>
               </ListItem>

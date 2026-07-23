@@ -7,6 +7,11 @@ import Admission from './pages/Admission';
 import QuiSommesNous from './pages/QuiSommesNous';
 import InscriptionLayout from './components/inscription/InscriptionLayout';
 import EspaceInscriptionAccueil from './pages/EspaceInscriptionAccueil';
+import InscriptionSelection from './pages/InscriptionSelection';
+import InscriptionFormulaire from './pages/InscriptionFormulaire';
+import LoginPage from './pages/Login';
+import ApprochesPedagogiques from './pages/ApprochesPedagogiques';
+import NosEquipes from './pages/NosEquipes';
 function App() {
   return (
     <BrowserRouter>
@@ -19,10 +24,15 @@ function App() {
 
           {/* Sous-pages de L'Institut - note le chemin imbriqué */}
           <Route path="institut/qui-sommes-nous" element={<QuiSommesNous />} />
+          <Route path="institut/pedagogicalApproach" element={<ApprochesPedagogiques />} />
+          <Route path="institut/nos-equipes" element={<NosEquipes />} />
         </Route>
         <Route path="inscription" element={<InscriptionLayout />}>
-  <Route index element={<EspaceInscriptionAccueil />} />
+       <Route index element={<EspaceInscriptionAccueil />} />
+  <Route path="selection" element={<InscriptionSelection />} />
+  <Route path="formulaire" element={<InscriptionFormulaire />} />
 </Route>
+    <Route path="inscription/connexion" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );

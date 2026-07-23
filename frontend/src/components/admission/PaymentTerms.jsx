@@ -52,7 +52,7 @@ function PaymentTerms() {
           <Box textAlign="center">
             <Button
               component={RouterLink}
-              to="/admission/inscription"
+              to="/inscription/selection"
               variant="contained"
               endIcon={<ArrowForwardIcon />}
               sx={{ mt: 4, fontWeight: 700 }}
