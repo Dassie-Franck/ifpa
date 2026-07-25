@@ -10,18 +10,27 @@ class Candidature extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'reference', 'nom', 'prenom', 'date_naissance', 'sexe', 'email', 'telephone',
-        'adresse', 'niveau_etudes', 'filiere_id', 'campus_id', 'photo_identite',
-        'statut', 'dossier_complet', 'notes_admission', 'token_suivi',
-        'crm_contact_id', 'synchronise_crm',
-    ];
+  protected $fillable = [
+    'user_id', 'reference', 'nom', 'prenom', 'date_naissance', 'sexe', 'email', 'telephone',
+    'adresse', 'niveau_etudes', 'filiere_id', 'campus_id', 'photo_identite',
+    'statut', 'dossier_complet', 'notes_admission', 'token_suivi',
+    'crm_contact_id', 'synchronise_crm',
+    'motif_rejet', 'dossier_valide_le', 'date_limite_paiement', 'traite_par', 'relance_envoyee_le',
+];
 
-    protected $casts = [
-        'date_naissance' => 'date',
-        'dossier_complet' => 'boolean',
-        'synchronise_crm' => 'boolean',
-    ];
+protected $casts = [
+    'date_naissance' => 'date',
+    'dossier_complet' => 'boolean',
+    'synchronise_crm' => 'boolean',
+    'dossier_valide_le' => 'datetime',
+    'date_limite_paiement' => 'datetime',
+    'relance_envoyee_le' => 'datetime',
+];
+
+public function agentTraitant()
+{
+    return $this->belongsTo(User::class, 'traite_par');
+}
 
     protected static function booted(): void
     {
@@ -50,4 +59,9 @@ class Candidature extends Model
     {
         return $this->hasMany(Paiement::class);
     }
+
+    public function user()
+{
+    return $this->belongsTo(User::class);
+}
 }

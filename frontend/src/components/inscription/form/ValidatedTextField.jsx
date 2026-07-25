@@ -1,10 +1,7 @@
-import { TextField, InputAdornment, Typography, Box } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Box, TextField, Typography } from '@mui/material';
 
-// Champ texte avec icône, message de validation en temps réel (succès/erreur),
-// utilisé pour tous les champs du formulaire d'inscription (§6.5).
+// Champ de formulaire avec icône encadrée + retour visuel de validation (§6.5)
+// Fond lavande + bordure verte quand rempli, message "C'est bon !" en dessous.
 function ValidatedTextField({
   label,
   required,
@@ -12,69 +9,75 @@ function ValidatedTextField({
   value,
   onChange,
   isValid,
-  errorMessage = 'Ce champ est invalide',
-  successMessage = "C'est bon !",
-  type = 'text',
-  ...props
+  placeholder,
+  type,
+  InputLabelProps,
+  ...rest
 }) {
-  const touched = value !== '' && value !== undefined;
+  const borderColor = isValid ? '#2e7d32' : '#ccc';
 
   return (
     <Box>
       <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>
-        {label} {required && <Box component="span" sx={{ color: 'primary.main' }}>(*)</Box>}
-      </Typography>
-      <TextField
-        fullWidth
-        type={type}
-        value={value}
-        onChange={onChange}
-        variant="outlined"
-        size="small"
-        error={touched && isValid === false}
-        InputProps={{
-          startAdornment: Icon && (
-            <InputAdornment position="start">
-              <Icon sx={{ fontSize: 20, color: 'text.secondary' }} />
-            </InputAdornment>
-          ),
-        }}
-        sx={{
-          bgcolor: touched && isValid ? '#eef3fb' : '#fff',
-          '& .MuiOutlinedInput-root': {
-            borderColor: touched && isValid ? 'secondary.main' : undefined,
-          },
-        }}
-        {...props}
-      />
-      <AnimatePresence>
-        {touched && isValid !== undefined && (
-          <motion.div
-            initial={{ opacity: 0, y: -5 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.5 }}>
-              {isValid ? (
-                <>
-                  <CheckCircleIcon sx={{ fontSize: 14, color: '#2e7d32' }} />
-                  <Typography variant="caption" sx={{ color: '#2e7d32' }}>
-                    {successMessage}
-                  </Typography>
-                </>
-              ) : (
-                <>
-                  <ErrorIcon sx={{ fontSize: 14, color: '#d32f2f' }} />
-                  <Typography variant="caption" sx={{ color: '#d32f2f' }}>
-                    {errorMessage}
-                  </Typography>
-                </>
-              )}
-            </Box>
-          </motion.div>
+        {label}{' '}
+        {required && (
+          <Box component="span" sx={{ color: 'primary.main' }}>
+            (*)
+          </Box>
         )}
-      </AnimatePresence>
+      </Typography>
+
+      <Box sx={{ display: 'flex', alignItems: 'stretch' }}>
+        {/* Bloc icône */}
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 44,
+            flexShrink: 0,
+            bgcolor: '#f2f2f2',
+            border: '1px solid',
+            borderColor,
+            borderRight: 'none',
+            borderRadius: '4px 0 0 4px',
+            color: 'text.secondary',
+          }}
+        >
+          {Icon && <Icon fontSize="small" />}
+        </Box>
+
+        {/* Champ de saisie */}
+        <TextField
+          fullWidth
+          size="small"
+          type={type}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          InputLabelProps={InputLabelProps}
+          {...rest}
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '0 4px 4px 0',
+              bgcolor: isValid ? '#e8eaf6' : '#fff',
+              '& fieldset': { borderColor },
+              '&:hover fieldset': { borderColor },
+              '&.Mui-focused fieldset': { borderColor },
+            },
+            '& .MuiOutlinedInput-input': { py: 1.2 },
+          }}
+        />
+      </Box>
+
+      {isValid && (
+        <Typography
+          variant="caption"
+          sx={{ color: '#2e7d32', display: 'block', mt: 0.5 }}
+        >
+          ✓ C'est bon !
+        </Typography>
+      )}
     </Box>
   );
 }

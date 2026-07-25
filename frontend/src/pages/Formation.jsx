@@ -1,24 +1,23 @@
-import { Box, Container, Typography, Grid, TextField, InputAdornment, IconButton } from '@mui/material';
+import { useState } from 'react';
+import { Box, Container, Typography, Grid, TextField, InputAdornment, IconButton, CircularProgress, Alert } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import PageBanner from '../components/common/PageBanner';
 import FiliereCard from '../components/filieres/FiliereCard';
 import AnimatedSection from '../components/common/AnimatedSection';
-
-// Filières paramédicales IFPA (§6.3 du cahier des charges)
-// Données statiques temporaires — seront remplacées par l'API Laravel (/api/v1/filieres)
-const filieres = [
-  { title: 'Delegue Medicale', image: '/assets/filieres/delegue-medical.jpg', link: '/formation/delegue-medicale' },
-  { title: 'Vendeur en pharmacie', image: '/assets/filieres/vendeur-pharmacie.jpg', link: '/formation/vendeur-pharmacie' },
-  { title: 'Auxiliaire de Vie', image: '/assets/filieres/Auxiliare-de-vie.jpg', link: '/formation/auxiliaire-de-vie' },
-  { title: 'Assistant en Cabinet Medicale', image: '/assets/filieres/assistant-cabinet.jpg', link: '/formation/assistant-cabinet-medicale' },
-  { title: 'Aide Chimiste Biologiste', image: '/assets/filieres/chimiste.jpg', link: '/formation/aide-chimiste-biologiste' },
-  
-];
+import useFetch from '../hooks/useFetch';
+import { filiereService } from '../services/filiereService';
 
 function Formation() {
+  const [search, setSearch] = useState('');
+
+  const { data: filieres, loading, error } = useFetch(
+    () => filiereService.getAll(search),
+    [search]
+  );
+
   return (
     <Box>
-      <PageBanner image="/assets/banners/formation-banner1.jpg" breadcrumbLabel="Formation" />
+      <PageBanner image="/assets/banners/formation-banner.jpg" breadcrumbLabel="Formation" />
 
       <Container maxWidth="lg" sx={{ py: 6 }}>
         <AnimatedSection>
@@ -28,7 +27,7 @@ function Formation() {
             textAlign="center"
             sx={{ color: 'text.secondary', letterSpacing: 2, mb: 1 }}
           >
-           <center>CHOISIR SA FORMATION</center>
+            CHOISIR SA FORMATION
           </Typography>
           <Typography variant="h4" textAlign="center" sx={{ fontWeight: 800, mb: 5 }}>
             Nos{' '}
@@ -48,18 +47,41 @@ function Formation() {
           </Typography>
         </AnimatedSection>
 
-        <Grid container spacing={2}>
-          {filieres.map((filiere, index) => (
-            <Grid item xs={12} sm={6} md={4} key={filiere.link} sx={{ display: 'flex' }}>
-              <AnimatedSection delay={index * 0.1} style={{ width: '100%' }}>
-                <FiliereCard {...filiere} />
-              </AnimatedSection>
-            </Grid>
-          ))}
-        </Grid>
+        {loading && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+            <CircularProgress color="primary" />
+          </Box>
+        )}
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 4 }}>
+            Impossible de charger les filières pour le moment. Veuillez réessayer plus tard.
+          </Alert>
+        )}
+
+        {!loading && !error && filieres?.length === 0 && (
+          <Typography textAlign="center" sx={{ color: 'text.secondary', py: 4 }}>
+            Aucune filière ne correspond à votre recherche.
+          </Typography>
+        )}
+
+        {!loading && !error && filieres?.length > 0 && (
+          <Grid container spacing={3}>
+            {filieres.map((filiere, index) => (
+              <Grid item xs={12} sm={6} md={4} key={filiere.id}>
+                <AnimatedSection delay={index * 0.1}>
+                  <FiliereCard
+                    title={filiere.titre}
+                    image={filiere.image_couverture || '/assets/filieres/placeholder.jpg'}
+                    link={`/formation/${filiere.slug}`}
+                  />
+                </AnimatedSection>
+              </Grid>
+            ))}
+          </Grid>
+        )}
       </Container>
 
-      {/* Bandeau rouge - barre de recherche */}
       <AnimatedSection direction="none">
         <Box sx={{ bgcolor: 'primary.main', py: 4 }}>
           <Container maxWidth="sm">
@@ -67,6 +89,8 @@ function Formation() {
               fullWidth
               placeholder="Rechercher une formation..."
               variant="outlined"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               sx={{
                 bgcolor: '#fff',
                 borderRadius: 1,

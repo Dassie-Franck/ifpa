@@ -81,21 +81,26 @@ function AdmissionIntro() {
             >
               <Box
                 component="img"
-                src="/assets/admission/plaquette-ifpa.jpg"
+                src="/assets/evenements/evenement1.png"
                 alt="Plaquette IFPA"
-                sx={{ width: '100%', borderRadius: 1, boxShadow: '0 4px 16px rgba(0,0,0,0.15)', mb: 2 }}
+                sx={{ width: '20%', borderRadius: 1, boxShadow: '0 4px 16px rgba(0,0,0,0.15)', mb: 2 }}
               />
+              <Grid item xs={12} md={7}>
+           
+ 
+            
               <Button
-                fullWidth
+                component={RouterLink}
+                
                 variant="contained"
-                color="primary"
-                endIcon={<ArrowForwardIcon />}
+               
                 href="/assets/admission/plaquette-ifpa.pdf"
-                target="_blank"
                 sx={{ fontWeight: 700 }}
               >
-                Télécharger la plaquette
+               Telecharger
               </Button>
+            
+          </Grid>
             </motion.div>
           </Grid>
         </Grid>

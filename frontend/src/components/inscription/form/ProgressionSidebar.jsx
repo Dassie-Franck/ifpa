@@ -9,7 +9,16 @@ function ProgressionSidebar({ steps, activeStep }) {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
-      <Box sx={{ bgcolor: '#f0f0f0', p: 3 }}>
+      <Box
+        sx={{
+          bgcolor: '#f0f0f0',
+          p: 3,
+          borderRadius: 2,
+          boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+          position: { md: 'sticky' },
+          top: { md: 24 },
+        }}
+      >
         <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2.5 }}>
           Progression de remplissage
         </Typography>

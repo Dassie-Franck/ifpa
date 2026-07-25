@@ -49,14 +49,14 @@ const facilities = [
   {
     name: 'Laboratoire Médical',
     description: 'Des plateaux techniques équipés pour la simulation des pratiques cliniques et paramédicales',
-    image: '/assets/campus/campus1.jpg',
+    image: '/assets/equipement_infra/laboratoire.jpg',
     link: '/vie-au-campus/laboratoire',
     color: 'primary.main',
   },
   {
     name: 'Infrastructures',
     description: 'Des infrastructures modernes et sécurisées au service de la réussite des étudiants',
-    image: '/assets/campus/campus1.jpg',
+    image:  '/assets/equipement_infra/infrastructure.jpg',
     link: '/vie-au-campus/infrastructures',
     color: 'primary.dark',
   },

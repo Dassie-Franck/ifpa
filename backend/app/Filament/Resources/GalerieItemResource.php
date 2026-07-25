@@ -9,7 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-
+use App\Support\UserRoles;
 class GalerieItemResource extends Resource
 {
     protected static ?string $model = GalerieItem::class;
@@ -17,6 +17,25 @@ class GalerieItemResource extends Resource
     protected static ?string $navigationLabel = 'Galerie';
     protected static ?string $navigationGroup = 'Contenu du site';
 
+    public static function canViewAny(): bool
+{
+    return UserRoles::peutGererContenu();
+}
+
+public static function canCreate(): bool
+{
+    return UserRoles::peutGererContenu();
+}
+
+public static function canEdit($record): bool
+{
+    return UserRoles::peutGererContenu();
+}
+
+public static function canDelete($record): bool
+{
+    return UserRoles::peutGererContenu();
+}
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -64,4 +83,9 @@ class GalerieItemResource extends Resource
             'edit' => Pages\EditGalerieItem::route('/{record}/edit'),
         ];
     }
+
+//     public static function canViewAny(): bool
+// {
+//     return auth()->user()->can('gerer_contenu');
+// }
 }

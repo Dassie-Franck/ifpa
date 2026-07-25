@@ -9,9 +9,13 @@ import InscriptionLayout from './components/inscription/InscriptionLayout';
 import EspaceInscriptionAccueil from './pages/EspaceInscriptionAccueil';
 import InscriptionSelection from './pages/InscriptionSelection';
 import InscriptionFormulaire from './pages/InscriptionFormulaire';
-import LoginPage from './pages/Login';
+import LoginPage from './pages/LoginPage';
+import Register from './pages/Register';
+import ProtectedRoute from './components/inscription/ProtectedRoute';
 import ApprochesPedagogiques from './pages/ApprochesPedagogiques';
 import NosEquipes from './pages/NosEquipes';
+import CandidatDashboard from './pages/CandidatDashboard';
+import InscriptionSuivi from './pages/InscriptionSuivi';
 function App() {
   return (
     <BrowserRouter>
@@ -31,8 +35,20 @@ function App() {
        <Route index element={<EspaceInscriptionAccueil />} />
   <Route path="selection" element={<InscriptionSelection />} />
   <Route path="formulaire" element={<InscriptionFormulaire />} />
+  <Route path="connexion" element={<LoginPage />} />
+<Route path="creer-compte" element={<Register />} />
+<Route path="suivi/:token" element={<InscriptionSuivi />} />
+ <Route
+  path="tableau-de-bord"
+  element={
+    <ProtectedRoute>
+      <CandidatDashboard />
+    </ProtectedRoute>
+  }
+/>
 </Route>
     <Route path="inscription/connexion" element={<LoginPage />} />
+   
       </Routes>
     </BrowserRouter>
   );

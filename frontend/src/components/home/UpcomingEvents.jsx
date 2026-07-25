@@ -1,33 +1,26 @@
-import { Box, Container, Typography, Grid, Stack } from '@mui/material';
+import { Box, Container, Typography, Grid, Stack, CircularProgress } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-
-// Données statiques temporaires — seront remplacées par l'API Laravel (/api/v1/evenements)
-const events = [
-  {
-    image: '/assets/evenements/evenement1.png',
-    lieu: 'Campus Principal',
-    date: '16 Oct',
-    title: 'Rentrée des nouveaux étudiants',
-    link: '/vie-au-campus/rentree-2026',
-  },
-  {
-    image: '/assets/evenements/evenement2.png',
-    lieu: 'Campus Principal',
-    date: '15 Sep',
-    title: "Journée portes ouvertes — Filières paramédicales",
-    link: '/admission/journee-portes-ouvertes',
-  },
-];
+import useFetch from '../../hooks/useFetch';
+import { contentService } from '../../services/contentService';
 
 function UpcomingEvents() {
+  const { data: events, loading } = useFetch(() => contentService.getEvenements(), []);
+  const upcomingTwo = events?.slice(0, 2) || [];
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
+        <CircularProgress color="primary" />
+      </Box>
+    );
+  }
+
+  if (upcomingTwo.length === 0) return null;
+
   return (
     <Box sx={{ py: 6 }}>
       <Container maxWidth="lg">
-        <Typography
-          variant="overline"
-          display="block"
-          sx={{ color: 'text.secondary', letterSpacing: 2, mb: 0.5 }}
-        >
+        <Typography variant="overline" display="block" sx={{ color: 'text.secondary', letterSpacing: 2, mb: 0.5 }}>
           ÉVÈNEMENTS À VENIR
         </Typography>
         <Typography variant="h4" sx={{ fontWeight: 800, color: 'primary.main', mb: 4 }}>
@@ -35,40 +28,42 @@ function UpcomingEvents() {
         </Typography>
 
         <Grid container spacing={4}>
-          {events.map((event) => (
-            <Grid item xs={12} sm={6} key={event.link}>
-              <Stack
-                direction="row"
-                spacing={2}
-                component={RouterLink}
-                to={event.link}
-                sx={{ textDecoration: 'none', alignItems: 'center' }}
-              >
-                <Box
-                  sx={{
-                    width: 90,
-                    height: 90,
-                    flexShrink: 0,
-                    borderRadius: 1,
-                    backgroundImage: `url(${event.image})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                  }}
-                />
-                <Box>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: 'primary.main', fontWeight: 700, mb: 0.5 }}
-                  >
-                    [ {event.lieu} ]
-                  </Typography>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'text.primary' }}>
-                    {event.date}: {event.title}
-                  </Typography>
-                </Box>
-              </Stack>
-            </Grid>
-          ))}
+          {upcomingTwo.map((event) => {
+            const date = new Date(event.date_debut);
+            const dateLabel = date.toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' });
+
+            return (
+              <Grid item xs={12} sm={6} key={event.id}>
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  component={RouterLink}
+                  to={`/vie-au-campus/evenements/${event.slug}`}
+                  sx={{ textDecoration: 'none', alignItems: 'center' }}
+                >
+                  <Box
+                    sx={{
+                      width: 90,
+                      height: 90,
+                      flexShrink: 0,
+                      borderRadius: 1,
+                      backgroundImage: `url(${event.image_couverture || '/assets/evenements/placeholder.jpg'})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                    }}
+                  />
+                  <Box>
+                    <Typography variant="body2" sx={{ color: 'primary.main', fontWeight: 700, mb: 0.5 }}>
+                      [ {event.campus?.nom || event.lieu || 'IFPA'} ]
+                    </Typography>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'text.primary' }}>
+                      {dateLabel}: {event.titre}
+                    </Typography>
+                  </Box>
+                </Stack>
+              </Grid>
+            );
+          })}
         </Grid>
       </Container>
     </Box>

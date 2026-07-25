@@ -1,22 +1,22 @@
-import { Box, Typography, Grid } from '@mui/material';
+import { Box, Typography, Grid, CircularProgress } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { motion } from 'framer-motion';
+import useFetch from '../../../hooks/useFetch';
+import { filiereService } from '../../../services/filiereService';
 
-// Filières disponibles au dépôt de dossier — à synchroniser avec l'API Laravel (/api/v1/filieres)
-const filieresList = [
-  'Soins infirmiers',
-  'Aide-soignant',
-  'Sage-femme',
-  'Technicien de laboratoire',
-];
+function FiliereSelector({ selectedId, onSelect }) {
+  const { data: filieres, loading } = useFetch(() => filiereService.getAll(), []);
 
-function FiliereSelector({ selected, onSelect }) {
+  if (loading) {
+    return <CircularProgress size={24} />;
+  }
+
   return (
     <Grid container spacing={1.5}>
-      {filieresList.map((filiere, index) => {
-        const isSelected = selected === filiere;
+      {filieres?.map((filiere, index) => {
+        const isSelected = selectedId === filiere.id;
         return (
-          <Grid item xs={12} sm={6} key={filiere}>
+          <Grid item xs={12} sm={6} key={filiere.id}>
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -25,7 +25,7 @@ function FiliereSelector({ selected, onSelect }) {
               whileTap={{ scale: 0.98 }}
             >
               <Box
-                onClick={() => onSelect(filiere)}
+                onClick={() => onSelect(filiere.id, filiere.titre)}
                 sx={{
                   border: '2px solid',
                   borderColor: isSelected ? 'primary.main' : '#eee',
@@ -39,7 +39,7 @@ function FiliereSelector({ selected, onSelect }) {
                   transition: 'all 0.2s ease',
                 }}
               >
-                <Typography sx={{ fontWeight: 600 }}>{filiere}</Typography>
+                <Typography sx={{ fontWeight: 600 }}>{filiere.titre}</Typography>
                 {isSelected && <CheckCircleIcon sx={{ color: 'primary.main' }} />}
               </Box>
             </motion.div>

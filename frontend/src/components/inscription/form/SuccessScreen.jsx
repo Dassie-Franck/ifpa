@@ -1,9 +1,9 @@
 import { Box, Container, Typography, Button, Stack } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import MarkEmailReadIcon from '@mui/icons-material/MarkEmailRead';
 import { motion } from 'framer-motion';
 import { Link as RouterLink } from 'react-router-dom';
 
-function SuccessScreen({ reference }) {
+function SuccessScreen({ reference, tokenSuivi }) {
   return (
     <Container maxWidth="sm" sx={{ py: 10, textAlign: 'center' }}>
       <motion.div
@@ -11,18 +11,14 @@ function SuccessScreen({ reference }) {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: 'backOut' }}
       >
-        <CheckCircleIcon sx={{ fontSize: 80, color: '#2e7d32', mb: 2 }} />
+        <MarkEmailReadIcon sx={{ fontSize: 80, color: '#2e7d32', mb: 2 }} />
       </motion.div>
-      <motion.div
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
+      <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
         <Typography variant="h5" sx={{ fontWeight: 800, mb: 1.5 }}>
           Votre dossier a bien été transmis !
         </Typography>
         <Typography sx={{ color: 'text.secondary', mb: 1 }}>
-          Un identifiant unique vous a été envoyé par SMS et par email :
+          Référence de votre dossier :
         </Typography>
         <Box
           sx={{
@@ -41,11 +37,18 @@ function SuccessScreen({ reference }) {
           {reference}
         </Box>
         <Typography sx={{ color: 'text.secondary', mb: 4 }}>
-          Vous pouvez suivre l'avancement de votre dossier à tout moment depuis votre espace de
-          suivi, à l'aide de cet identifiant.
+          Notre équipe va étudier votre dossier. Vous recevrez une notification par email et par
+          WhatsApp dès qu'une décision sera prise — comptez généralement quelques jours ouvrés.
+          Si votre dossier est validé, vous aurez ensuite 24 à 48h pour procéder au paiement des
+          frais de dossier.
         </Typography>
         <Stack direction="row" spacing={2} justifyContent="center">
-          <Button component={RouterLink} to="/inscription/suivi" variant="contained" sx={{ fontWeight: 700 }}>
+          <Button
+            component={RouterLink}
+            to={`/inscription/suivi/${tokenSuivi}`}
+            variant="contained"
+            sx={{ fontWeight: 700 }}
+          >
             Suivre mon dossier
           </Button>
           <Button component={RouterLink} to="/" variant="outlined" sx={{ fontWeight: 700 }}>

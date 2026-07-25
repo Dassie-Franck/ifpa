@@ -10,7 +10,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
-
+use App\Support\UserRoles;
 class CampusResource extends Resource
 {
     protected static ?string $model = Campus::class;
@@ -18,6 +18,25 @@ class CampusResource extends Resource
     protected static ?string $navigationLabel = 'Campus / Sites';
     protected static ?string $navigationGroup = 'Contenu du site';
 
+    public static function canViewAny(): bool
+{
+    return UserRoles::peutGererContenu();
+}
+
+public static function canCreate(): bool
+{
+    return UserRoles::peutGererContenu();
+}
+
+public static function canEdit($record): bool
+{
+    return UserRoles::peutGererContenu();
+}
+
+public static function canDelete($record): bool
+{
+    return UserRoles::peutGererContenu();
+}
     public static function form(Form $form): Form
     {
         return $form->schema([
@@ -70,4 +89,5 @@ class CampusResource extends Resource
             'edit' => Pages\EditCampus::route('/{record}/edit'),
         ];
     }
+
 }

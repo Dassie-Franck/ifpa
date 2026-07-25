@@ -10,7 +10,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
-
+use App\Support\UserRoles;
 class FiliereResource extends Resource
 {
     protected static ?string $model = Filiere::class;
@@ -22,6 +22,26 @@ class FiliereResource extends Resource
     protected static ?string $modelLabel = 'Filière';
 
     protected static ?string $navigationGroup = 'Contenu du site';
+
+    public static function canViewAny(): bool
+{
+    return UserRoles::peutGererContenu();
+}
+
+public static function canCreate(): bool
+{
+    return UserRoles::peutGererContenu();
+}
+
+public static function canEdit($record): bool
+{
+    return UserRoles::peutGererContenu();
+}
+
+public static function canDelete($record): bool
+{
+    return UserRoles::peutGererContenu();
+}
 
     public static function form(Form $form): Form
     {
@@ -166,4 +186,9 @@ class FiliereResource extends Resource
             'edit' => Pages\EditFiliere::route('/{record}/edit'),
         ];
     }
+
+//     public static function canViewAny(): bool
+// {
+//     return auth()->user()->can('gerer_contenu');
+// }
 }

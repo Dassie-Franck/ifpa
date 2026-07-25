@@ -38,9 +38,11 @@ function DocumentsStep({ formData, setFormData }) {
       <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
         <Typography sx={{ fontWeight: 700, mb: 1.5 }}>Filière choisie</Typography>
         <FiliereSelector
-          selected={formData.filiere}
-          onSelect={(filiere) => setFormData((prev) => ({ ...prev, filiere }))}
-        />
+  selectedId={formData.filiereId}
+  onSelect={(filiereId, filiereTitre) =>
+    setFormData((prev) => ({ ...prev, filiereId, filiereTitre }))
+  }
+/>
       </motion.div>
 
       <Box sx={{ mt: 4 }}>

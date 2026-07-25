@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-
-class User extends Authenticatable
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Permission\Traits\HasRoles;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
+use Laravel\Sanctum\HasApiTokens;
+class User extends Authenticatable implements FilamentUser
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles , HasApiTokens;
 
     protected $fillable = [
         'name', 'email', 'password', 'role', 'actif',
@@ -29,8 +30,19 @@ class User extends Authenticatable
         ];
     }
 
+    // Seuls les comptes actifs peuvent accéder au panneau Filament
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->actif === true;
+    }
+
     public function actualites()
     {
         return $this->hasMany(Actualite::class, 'auteur_id');
     }
+
+    public function candidatures()
+{
+    return $this->hasMany(Candidature::class);
+}
 }
