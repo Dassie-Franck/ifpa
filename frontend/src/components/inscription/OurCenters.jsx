@@ -18,8 +18,8 @@ function DiamondBullet() {
 }
 
 // Zones de candidature et campus/antennes de l'IFPA — à ajuster avec les vraies données
-const zones = ['Zone Cameroun', 'Zone Congo'];
-const sites = ['Campus Principal', 'Antenne 2'];
+const zones = ['Zone Cameroun'];
+const sites = ['Campus Principal'];
 
 function OurCenters() {
   return (
@@ -49,9 +49,9 @@ function OurCenters() {
             >
               <Box
                 component="img"
-                src="/assets/inscription/centres-sites.jpg"
+                src="/assets/campus/campus1.jpg"
                 alt="Centres et sites IFPA"
-                sx={{ width: '100%', borderRadius: 1 }}
+                sx={{ width: '50%', borderRadius: 100 }}
               />
             </motion.div>
           </Grid>
@@ -66,7 +66,7 @@ function OurCenters() {
               <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 1.5 }}>
                 <DiamondBullet />
                 <Typography sx={{ fontWeight: 700, color: 'primary.main' }}>
-                  Le dépôt de dossier est ouvert dans deux zones :
+                  Le dépôt de dossier est ouvert dans une  zones :
                 </Typography>
               </Stack>
               <Stack spacing={0.5} sx={{ pl: 3, mb: 3 }}>

@@ -9,7 +9,7 @@ import OurSpecificities from '../components/institut/OurSpecificities';
 function QuiSommesNous() {
   return (
     <Box>
-      <PageBanner image="/assets/banners/institut-banner.jpg" breadcrumbLabel="Qui sommes-nous" />
+      <PageBanner image="/assets/banners/admission-banners.jpg" breadcrumbLabel="Qui sommes-nous" />
       <AboutIntro />
       <OurValues />
       <MissionAmbition />

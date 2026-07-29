@@ -26,7 +26,7 @@ function AdmissionStepsNav() {
           variant="overline"
           sx={{ color: '#fff', opacity: 0.85, display: 'block', pt: 1.5, letterSpacing: 2 }}
         >
-          LE CONCOURS EN QUELQUES ÉTAPES
+          L'INSCRIPTION EN QUELQUES ÉTAPES
         </Typography>
       </Container>
 

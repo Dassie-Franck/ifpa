@@ -52,6 +52,21 @@ public static function canDelete($record): bool
                 Forms\Components\DateTimePicker::make('date_debut')->required(),
                 Forms\Components\DateTimePicker::make('date_fin'),
                 Forms\Components\TextInput::make('lieu'),
+                Forms\Components\Select::make('type_communique')
+    ->label('Type de communiqué')
+    ->options([
+        'examens' => 'Examens',
+        'inscriptions' => 'Inscriptions',
+        'recrutement' => 'Recrutement de personnel',
+        'activite_campus' => 'Activité sur le campus',
+        'annonce_generale' => 'Annonce générale',
+    ])
+    ->helperText('Utilisé pour catégoriser l\'annonce dans l\'espace presse.'),
+
+Forms\Components\Toggle::make('visible_presse')
+    ->label('Publier dans l\'espace presse')
+    ->helperText('Si activé, cet événement apparaît sur la page Institut > Espace presse.')
+    ->default(false),
                 Forms\Components\Select::make('campus_id')
                     ->label('Campus')
                     ->options(Campus::pluck('nom', 'id'))
@@ -64,21 +79,34 @@ public static function canDelete($record): bool
     }
 
     public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                Tables\Columns\ImageColumn::make('image_couverture')->label(''),
-                Tables\Columns\TextColumn::make('titre')->searchable(),
-                Tables\Columns\TextColumn::make('date_debut')->dateTime('d/m/Y H:i')->sortable(),
-                Tables\Columns\TextColumn::make('campus.nom')->label('Campus'),
-                Tables\Columns\IconColumn::make('inscription_requise')->boolean(),
-                Tables\Columns\IconColumn::make('actif')->boolean(),
-            ])
-            ->defaultSort('date_debut', 'desc')
-            ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
-            ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
-    }
-
+{
+    return $table
+        ->columns([
+            Tables\Columns\ImageColumn::make('image_couverture')->label(''),
+            Tables\Columns\TextColumn::make('titre')->searchable(),
+            Tables\Columns\TextColumn::make('date_debut')->dateTime('d/m/Y H:i')->sortable(),
+            Tables\Columns\TextColumn::make('campus.nom')->label('Campus'),
+            Tables\Columns\IconColumn::make('inscription_requise')->boolean(),
+            Tables\Columns\IconColumn::make('actif')->boolean(),
+            Tables\Columns\IconColumn::make('visible_presse')
+                ->label('Presse')
+                ->boolean(),
+        ])
+        ->filters([
+            Tables\Filters\TernaryFilter::make('visible_presse')
+                ->label('Visible en espace presse'),
+        ])
+        ->defaultSort('date_debut', 'desc')
+        ->actions([
+            Tables\Actions\EditAction::make(),
+            Tables\Actions\DeleteAction::make(),
+        ])
+        ->bulkActions([
+            Tables\Actions\BulkActionGroup::make([
+                Tables\Actions\DeleteBulkAction::make(),
+            ]),
+        ]);
+}       
     public static function getPages(): array
     {
         return [

@@ -12,7 +12,7 @@ function InscriptionHero() {
       sx={{
         position: 'relative',
         height: { xs: 340, md: 420 },
-        backgroundImage: 'url(/assets/inscription/hero-campus.jpg)',
+        backgroundImage: 'url(/assets/hero/inscription.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         display: 'flex',

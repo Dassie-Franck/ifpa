@@ -7,21 +7,40 @@ import { motion } from 'framer-motion';
 // définies sur la page Formation ; à synchroniser avec l'API Laravel plus tard
 const filieres = [
   {
-    title: 'Soins infirmiers',
-    resume: "Formation de 3 ans préparant aux soins infirmiers généraux, en alternance théorie/pratique hospitalière.",
+    title: 'Délégué Médical',
+    resume: "Formation de 1 an préparant aux métiers de la visite médicale, du conseil pharmaceutique et de la gestion de secteur. Alternance entre cours théoriques et stages pratiques en entreprise.",
+    niveau: 'BACC +2, 3, 4',
+    prix: '400 000 FCFA',
+    debouches: ['Consultant / Formateur', 'Chef de produit', 'Responsable de région']
   },
   {
-    title: 'Aide-soignant',
-    resume: "Formation de 1 an préparant à l'accompagnement des patients dans les actes de la vie quotidienne.",
+    title: 'Vendeur en Pharmacie',
+    resume: "Formation de 1 an dédiée à la vente et au conseil en officine, à l'assistance pharmaceutique et à la gestion de point de vente.",
+    niveau: 'PROBATOIRE (toutes filières)',
+    prix: '250 000 FCFA',
+    debouches: ['Assistant en pharmacie', 'Préparateur en pharmacie', 'Gestionnaire de point de vente']
   },
   {
-    title: 'Sage-femme',
-    resume: "Formation de 3 ans dédiée au suivi de grossesse, à l'accouchement et aux soins post-natals.",
+    title: 'Auxiliaire de Vie',
+    resume: "Formation de 1 an centrée sur l'accompagnement des personnes âgées, dépendantes ou en situation de handicap dans les actes de la vie quotidienne.",
+    niveau: 'BEPC',
+    prix: '250 000 FCFA',
+    debouches: ['Structures d\'aide à domicile', 'Collectivités locales', 'Travail indépendant']
   },
   {
-    title: 'Technicien de laboratoire',
-    resume: "Formation de 2 ans axée sur les analyses médicales et le diagnostic biologique.",
+    title: 'Assistant en Cabinet Médical',
+    resume: "Formation de 1 an préparant à l'accueil, la gestion administrative et l'assistance médicale dans les cabinets, cliniques et centres de santé.",
+    niveau: 'BEPC et PLUS (toutes filières)',
+    prix: '250 000 FCFA',
+    debouches: ['Cabinets médicaux', 'Cliniques et hôpitaux', 'Centres de santé']
   },
+  {
+    title: 'Aide Chimiste Biologiste',
+    resume: "Formation de 1 an orientée vers les analyses biologiques, les techniques de laboratoire et le contrôle qualité dans le domaine paramédical.",
+    niveau: 'BEPC et PLUS (toutes filières)',
+    prix: '250 000 FCFA',
+    debouches: ['Technicien de laboratoire', 'Assistant de recherche', 'Contrôle qualité']
+  }
 ];
 
 function FilieresAccordionGrid() {

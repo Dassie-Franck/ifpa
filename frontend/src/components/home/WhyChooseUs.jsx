@@ -25,7 +25,7 @@ function WhyChooseUs() {
             mb: 1
           }}
         >
-          1 ESPRIT 2 CAMPUS 4 FILIÈRES
+          1 ESPRIT 1 CAMPUS 5 FILIÈRES
         </Typography>
 
 

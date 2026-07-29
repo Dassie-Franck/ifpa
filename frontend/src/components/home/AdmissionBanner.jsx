@@ -15,7 +15,7 @@ function AdmissionBanner() {
             variant="h6"
             sx={{ color: '#fff', fontWeight: 800, textAlign: { xs: 'center', sm: 'left' } }}
           >
-            Concours d'admission 2026-2027
+           Inscription Ouvertes 2026-2027
           </Typography>
           <Button
             component={RouterLink}

@@ -11,7 +11,7 @@ class MembreEquipe extends Model
 
     protected $table = 'membres_equipe';
 
-    protected $fillable = ['nom_complet', 'titre', 'specialite', 'biographie', 'photo', 'type', 'actif', 'ordre'];
+   protected $fillable = ['nom_complet', 'titre', 'email', 'specialite', 'biographie', 'photo', 'type', 'actif', 'ordre'];
 
     protected $casts = ['actif' => 'boolean'];
 }

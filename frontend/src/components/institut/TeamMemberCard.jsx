@@ -1,8 +1,6 @@
-import { Box, Typography, Stack } from '@mui/material';
-import EmailIcon from '@mui/icons-material/Email';
+import { Box, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
 
-// Carte membre d'équipe — photo (optionnelle), nom, fonction, email
 function TeamMemberCard({ name, role, email, photo, delay = 0 }) {
   return (
     <motion.div
@@ -36,20 +34,14 @@ function TeamMemberCard({ name, role, email, photo, delay = 0 }) {
           <Typography variant="caption" sx={{ color: 'primary.main', fontWeight: 700, textTransform: 'uppercase' }}>
             {role}
           </Typography>
-          <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 1 }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: email ? 1 : 0 }}>
             {name}
           </Typography>
-          <Stack direction="row" spacing={0.8} alignItems="center">
-            <EmailIcon sx={{ fontSize: 14, color: 'text.secondary' }} />
-            <Typography
-              component="a"
-              href={`mailto:${email}`}
-              variant="caption"
-              sx={{ color: 'text.secondary', textDecoration: 'none', wordBreak: 'break-all' }}
-            >
+          {email && (
+            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
               {email}
             </Typography>
-          </Stack>
+          )}
         </Box>
       </Box>
     </motion.div>

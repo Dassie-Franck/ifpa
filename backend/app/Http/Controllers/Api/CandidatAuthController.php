@@ -11,16 +11,17 @@ use Illuminate\Validation\ValidationException;
 
 class CandidatAuthController extends Controller
 {
-    /**
-     * Création de compte candidat (indépendant du dépôt de dossier —
-     * un candidat peut créer son compte avant ou pendant sa 1ère candidature).
-     */
+    private const MAX_TENTATIVES = 5;
+    private const DUREE_VERROUILLAGE_MINUTES = 15;
+
     public function register(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => ['required', 'confirmed', Password::min(8)],
+            // Honeypot — voir étape 2, champ 'website' doit rester vide
+            'website' => 'prohibited',
         ]);
 
         $user = User::create([
@@ -43,17 +44,46 @@ class CandidatAuthController extends Controller
         $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
+            'website' => 'prohibited', // honeypot
         ]);
 
+        // Un seul compte candidat par email garanti par la contrainte unique en base —
+        // first() est désormais fiable, mais on garde une vérification défensive.
         $user = User::where('email', $validated['email'])
             ->where('role', 'candidat')
             ->first();
 
-        if (! $user || ! Hash::check($validated['password'], $user->password)) {
+        if (! $user) {
+            throw ValidationException::withMessages(['email' => ['Identifiants incorrects.']]);
+        }
+
+        // Vérifie si le compte est actuellement verrouillé
+        if ($user->verrouille_jusqu_a && $user->verrouille_jusqu_a->isFuture()) {
+            $minutesRestantes = now()->diffInMinutes($user->verrouille_jusqu_a);
             throw ValidationException::withMessages([
-                'email' => ['Identifiants incorrects.'],
+                'email' => ["Compte temporairement verrouillé suite à plusieurs échecs. Réessayez dans {$minutesRestantes} minute(s)."],
             ]);
         }
+
+        if (! Hash::check($validated['password'], $user->password)) {
+            $user->increment('tentatives_echouees');
+
+            if ($user->tentatives_echouees >= self::MAX_TENTATIVES) {
+                $user->update([
+                    'verrouille_jusqu_a' => now()->addMinutes(self::DUREE_VERROUILLAGE_MINUTES),
+                    'tentatives_echouees' => 0,
+                ]);
+
+                throw ValidationException::withMessages([
+                    'email' => ['Trop de tentatives échouées. Compte verrouillé ' . self::DUREE_VERROUILLAGE_MINUTES . ' minutes.'],
+                ]);
+            }
+
+            throw ValidationException::withMessages(['email' => ['Identifiants incorrects.']]);
+        }
+
+        // Connexion réussie : réinitialiser le compteur
+        $user->update(['tentatives_echouees' => 0, 'verrouille_jusqu_a' => null]);
 
         $token = $user->createToken('candidat-token')->plainTextToken;
 
@@ -66,7 +96,6 @@ class CandidatAuthController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-
         return response()->json(['message' => 'Déconnecté avec succès.']);
     }
 

@@ -3,6 +3,8 @@ import { Box, Typography, TextField, Button, Link, Alert, Stack } from '@mui/mat
 import { motion } from 'framer-motion';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useCandidatAuth } from '../context/CandidatAuthContext';
+// === NOUVEL IMPORT ===
+import HoneypotField from '../components/common/HoneypotField';
 
 function Login() {
   const navigate = useNavigate();
@@ -12,19 +14,27 @@ function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  // === NOUVEL ÉTAT POUR LE HONEYPOT ===
+  const [website, setWebsite] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSubmitting(true);
     try {
-      await login(email, password);
+      // === AJOUT DU PARAMÈTRE website ===
+      await login(email, password, website);
       navigate('/inscription/tableau-de-bord');
     } catch (err) {
-      setError(
-        err.response?.data?.message ||
-        'Email ou mot de passe incorrect.'
-      );
+      // Gestion spécifique du rate limiting (429)
+      if (err.response?.status === 429) {
+        setError('Trop de tentatives. Veuillez patienter quelques instants avant de réessayer.');
+      } else {
+        setError(
+          err.response?.data?.message ||
+          'Email ou mot de passe incorrect.'
+        );
+      }
     } finally {
       setSubmitting(false);
     }
@@ -272,6 +282,9 @@ function Login() {
               </Stack>
             </motion.div>
           </Box>
+
+          {/* === CHAMP HONEYPOT INVISIBLE === */}
+          <HoneypotField value={website} onChange={(e) => setWebsite(e.target.value)} />
         </Box>
       </Box>
     </Box>

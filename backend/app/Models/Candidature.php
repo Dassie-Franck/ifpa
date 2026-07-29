@@ -15,7 +15,7 @@ class Candidature extends Model
     'adresse', 'niveau_etudes', 'filiere_id', 'campus_id', 'photo_identite',
     'statut', 'dossier_complet', 'notes_admission', 'token_suivi',
     'crm_contact_id', 'synchronise_crm',
-    'motif_rejet', 'dossier_valide_le', 'date_limite_paiement', 'traite_par', 'relance_envoyee_le',
+    'motif_rejet', 'dossier_valide_le', 'date_limite_paiement', 'traite_par', 'relance_envoyee_le', 'ramettes_papier_payantes',
 ];
 
 protected $casts = [
@@ -25,6 +25,7 @@ protected $casts = [
     'dossier_valide_le' => 'datetime',
     'date_limite_paiement' => 'datetime',
     'relance_envoyee_le' => 'datetime',
+    'ramettes_papier_payantes' => 'boolean',
 ];
 
 public function agentTraitant()

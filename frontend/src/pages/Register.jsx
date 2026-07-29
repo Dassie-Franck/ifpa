@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useCandidatAuth } from '../context/CandidatAuthContext';
 import { candidatureService } from '../services/candidatureService';
+// === NOUVEL IMPORT ===
+import HoneypotField from '../components/common/HoneypotField';
 
 function Register() {
   const navigate = useNavigate();
@@ -18,6 +20,8 @@ function Register() {
   });
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  // === NOUVEL ÉTAT POUR LE HONEYPOT ===
+  const [website, setWebsite] = useState('');
 
   const update = (field) => (e) => setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
@@ -26,7 +30,8 @@ function Register() {
     setError('');
     setSubmitting(true);
     try {
-      await register(form.name, form.email, form.password, form.passwordConfirmation);
+      // === AJOUT DU PARAMÈTRE website ===
+      await register(form.name, form.email, form.password, form.passwordConfirmation, website);
 
       if (form.referenceCandidature.trim()) {
         try {
@@ -321,6 +326,9 @@ function Register() {
               </Stack>
             </motion.div>
           </Box>
+
+          {/* === CHAMP HONEYPOT INVISIBLE === */}
+          <HoneypotField value={website} onChange={(e) => setWebsite(e.target.value)} />
         </Box>
       </Box>
     </Box>

@@ -8,6 +8,9 @@ import DocumentsStep from '../components/inscription/form/DocumentsStep';
 import SubmittingScreen from '../components/inscription/form/SubmittingScreen';
 import SuccessScreen from '../components/inscription/form/SuccessScreen';
 import { candidatureService } from '../services/candidatureService';
+// === NOUVEAUX IMPORTS ===
+import HoneypotField from '../components/common/HoneypotField';
+import useFormTiming from '../hooks/useFormTiming';
 
 // Le paiement n'est plus une étape de ce formulaire : il n'intervient qu'après
 // validation du dossier par l'équipe admissions (voir le nouveau workflow).
@@ -20,7 +23,7 @@ const steps = [
 function InscriptionFormulaire() {
   const [searchParams] = useSearchParams();
   const centre = searchParams.get('centre') || 'Non renseigné';
-
+  
   const [activeStep, setActiveStep] = useState(0);
   const [direction, setDirection] = useState(1);
   const [formData, setFormData] = useState({});
@@ -28,13 +31,23 @@ function InscriptionFormulaire() {
   const [result, setResult] = useState(null);
   const [submitError, setSubmitError] = useState('');
 
+  // === NOUVEL ÉTAT POUR LE HONEYPOT ===
+  const [website, setWebsite] = useState('');
+
+  // === HOOK POUR LE TEMPS DE REMPLISSAGE ===
+  const { getElapsedSeconds } = useFormTiming();
+
   const requiredFieldsStep0 = ['nom', 'prenom', 'telephone', 'genre', 'dateNaissance', 'paysOrigine', 'lieuNaissance', 'villeResidence'];
   const requiredFieldsStep1 = ['etablissement', 'niveauEtudes', 'email', 'adresse', 'nomParent', 'telephoneParent'];
   const isStep0Complete = requiredFieldsStep0.every((f) => formData[f]);
   const isStep1Complete = requiredFieldsStep1.every((f) => formData[f]);
   const isStep2Complete =
-    formData.filiereId && formData.photoIdentite && formData.acteNaissance &&
-    formData.diplome && formData.certificatMedical;
+    formData.filiereId && 
+    formData.demandeManuscrite && 
+    formData.diplomeReleveNotes &&
+    formData.acteNaissance && 
+    formData.carteIdentite && 
+    formData.photoIdentite;
 
   const isNextDisabled =
     (activeStep === 0 && !isStep0Complete) ||
@@ -43,14 +56,24 @@ function InscriptionFormulaire() {
 
   const handleNext = async () => {
     if (activeStep === steps.length - 1) {
+      // === VÉRIFICATION DU TEMPS MINIMUM (ANTI-BOT) ===
+      if (getElapsedSeconds() < 3) {
+        setSubmitError("Une erreur est survenue, veuillez réessayer.");
+        setStatus('error');
+        return;
+      }
+
       setStatus('submitting');
       setSubmitError('');
       try {
-        const response = await candidatureService.submit(formData);
+        // === APPEL AVEC LE CHAMP HONEYPOT ===
+        const response = await candidatureService.submit(formData, website);
         setResult(response.candidature);
         setStatus('success');
       } catch (error) {
+        const validationErrors = error.response?.data?.errors;
         const message =
+          validationErrors?.email?.[0] ||
           error.response?.data?.message ||
           "Une erreur est survenue lors de l'envoi de votre dossier. Veuillez réessayer.";
         setSubmitError(message);
@@ -88,6 +111,9 @@ function InscriptionFormulaire() {
       {activeStep === 0 && <PersonalInfoStep formData={formData} setFormData={setFormData} />}
       {activeStep === 1 && <AdditionalInfoStep formData={formData} setFormData={setFormData} />}
       {activeStep === 2 && <DocumentsStep formData={formData} setFormData={setFormData} />}
+
+      {/* === CHAMP HONEYPOT INVISIBLE === */}
+      <HoneypotField value={website} onChange={(e) => setWebsite(e.target.value)} />
     </FormStepLayout>
   );
 }

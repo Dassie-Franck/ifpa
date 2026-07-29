@@ -7,12 +7,13 @@ use App\Models\CandidatureDocument;
 class CandidatureDocumentObserver
 {
     // Pièces requises pour toute candidature (version simple, cf. décision prise ensemble)
-    private const PIECES_REQUISES = [
-        'photo_identite',
-        'acte_naissance',
-        'diplome',
-        'certificat_medical',
-    ];
+   private const PIECES_REQUISES = [
+    'demande_manuscrite',
+    'diplome_releve_notes',
+    'acte_naissance',
+    'carte_identite',
+    'photo_identite',
+];
 
     public function created(CandidatureDocument $document): void
     {

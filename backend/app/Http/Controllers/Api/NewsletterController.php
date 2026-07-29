@@ -3,19 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreNewsletterRequest;
 use App\Models\NewsletterSubscriber;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class NewsletterController extends Controller
 {
-    public function store(Request $request)
+    public function store(StoreNewsletterRequest $request)
     {
-        $validated = $request->validate([
-            'email' => ['required', 'email', 'max:255'],
-        ]);
-
-        NewsletterSubscriber::firstOrCreate(['email' => $validated['email']]);
+        NewsletterSubscriber::firstOrCreate(['email' => $request->validated('email')]);
 
         return response()->json(['message' => 'Inscription à la newsletter confirmée.'], 201);
     }

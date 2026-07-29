@@ -8,6 +8,8 @@ import WaitingConfirmationScreen from '../components/inscription/form/WaitingCon
 import SuccessScreen from '../components/inscription/form/SuccessScreen';
 import usePolling from '../hooks/usePolling';
 import { playNotificationSound } from '../utils/notificationSound';
+import DownloadIcon from '@mui/icons-material/Download';
+import Button from '@mui/material/Button';
 
 const methods = [
   { key: 'orange_money', label: 'Orange Money', logo: '/assets/paiements/orange-money.png' },
@@ -105,6 +107,10 @@ function InscriptionSuivi() {
 
   const statutInfo = statutLabels[dossier.statut] || { label: dossier.statut, color: 'default' };
 
+  // --- Calcul du montant de base et du total avec majoration éventuelle ---
+  const fraisBase = Number(dossier.frais_formation || 10000);
+  const totalFrais = dossier.ramettes_papier_payantes ? fraisBase + 7000 : fraisBase;
+
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: { xs: 4, sm: 6, md: 8 } }}>
       <Container maxWidth="sm">
@@ -138,6 +144,15 @@ function InscriptionSuivi() {
                   sx={{ fontWeight: 600, fontSize: '0.85rem', py: 1 }} 
                 />
               </Box>
+              <Button
+                href={`http://localhost:8000/api/v1/candidatures/suivi/${token}/fiche-pdf`}
+                target="_blank"
+                variant="outlined"
+                startIcon={<DownloadIcon />}
+                sx={{ mb: 3, fontWeight: 600 }}
+              >
+                Télécharger ma fiche d'inscription (PDF)
+              </Button>
 
               {dossier.statut === 'rejete' && (
                 <Alert severity="error" sx={{ borderRadius: 2 }}>
@@ -159,6 +174,7 @@ function InscriptionSuivi() {
                     <strong>{new Date(dossier.date_limite_paiement).toLocaleString('fr-FR')}</strong>
                   </Alert>
 
+                  {/* --- AFFICHAGE DES FRAIS AVEC DÉTAIL ET MAJORATION --- */}
                   <Paper
                     elevation={0}
                     sx={{
@@ -169,10 +185,19 @@ function InscriptionSuivi() {
                       color: 'primary.main'
                     }}
                   >
-                    <Typography sx={{ fontWeight: 700, textAlign: 'center' }}>
-                      Frais de dossier : {Number(dossier.frais_formation || 10000).toLocaleString('fr-FR')} FCFA
+                    <Typography sx={{ fontWeight: 700, textAlign: 'center', mb: 0.5 }}>
+                      Frais de dossier : {fraisBase.toLocaleString('fr-FR')} FCFA
                     </Typography>
+                    {dossier.ramettes_papier_payantes && (
+                      <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center', mb: 2 }}>
+                        + 7 000 FCFA (ramettes de papier fournies par l'institut) ={' '}
+                        <Box component="span" sx={{ fontWeight: 700, color: 'primary.main' }}>
+                          {totalFrais.toLocaleString('fr-FR')} FCFA
+                        </Box>
+                      </Typography>
+                    )}
                   </Paper>
+                  {/* --- FIN MODIFICATION --- */}
 
                   <Typography sx={{ fontWeight: 700, mb: 1.5 }}>Choisissez votre moyen de paiement</Typography>
                   <Stack spacing={1.5} sx={{ mb: 3 }}>

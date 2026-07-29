@@ -38,24 +38,35 @@ function DocumentsStep({ formData, setFormData }) {
       <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
         <Typography sx={{ fontWeight: 700, mb: 1.5 }}>Filière choisie</Typography>
         <FiliereSelector
-  selectedId={formData.filiereId}
-  onSelect={(filiereId, filiereTitre) =>
-    setFormData((prev) => ({ ...prev, filiereId, filiereTitre }))
-  }
-/>
+          selectedId={formData.filiereId}
+          onSelect={(filiereId, filiereTitre) =>
+            setFormData((prev) => ({ ...prev, filiereId, filiereTitre }))
+          }
+        />
       </motion.div>
 
       <Box sx={{ mt: 4 }}>
         <Typography sx={{ fontWeight: 700, mb: 2 }}>Pièces justificatives</Typography>
         <Grid container spacing={2.5}>
           <Grid item xs={12} sm={6}>
+            <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
+              <DocumentUploadField
+                label="Demande d'admission manuscrite"
+                required
+                file={formData.demandeManuscrite}
+                onFileChange={setFile('demandeManuscrite')}
+                accept={{ 'image/*': [], 'application/pdf': [] }}
+              />
+            </motion.div>
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
               <DocumentUploadField
-                label="Photo d'identité"
+                label="Diplôme / Relevé de notes / Bordereau de réussite"
                 required
-                file={formData.photoIdentite}
-                onFileChange={setFile('photoIdentite')}
-                accept={{ 'image/*': [] }}
+                file={formData.diplomeReleveNotes}
+                onFileChange={setFile('diplomeReleveNotes')}
+                accept={{ 'image/*': [], 'application/pdf': [] }}
               />
             </motion.div>
           </Grid>
@@ -66,26 +77,29 @@ function DocumentsStep({ formData, setFormData }) {
                 required
                 file={formData.acteNaissance}
                 onFileChange={setFile('acteNaissance')}
+                accept={{ 'image/*': [], 'application/pdf': [] }}
               />
             </motion.div>
           </Grid>
           <Grid item xs={12} sm={6}>
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
               <DocumentUploadField
-                label="Diplôme requis"
+                label="Carte nationale d'identité"
                 required
-                file={formData.diplome}
-                onFileChange={setFile('diplome')}
+                file={formData.carteIdentite}
+                onFileChange={setFile('carteIdentite')}
+                accept={{ 'image/*': [], 'application/pdf': [] }}
               />
             </motion.div>
           </Grid>
           <Grid item xs={12} sm={6}>
             <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
               <DocumentUploadField
-                label="Certificat médical"
+                label="Photo d'identité (4x4)"
                 required
-                file={formData.certificatMedical}
-                onFileChange={setFile('certificatMedical')}
+                file={formData.photoIdentite}
+                onFileChange={setFile('photoIdentite')}
+                accept={{ 'image/*': [] }}
               />
             </motion.div>
           </Grid>

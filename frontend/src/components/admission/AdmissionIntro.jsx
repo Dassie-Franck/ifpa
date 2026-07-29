@@ -10,7 +10,7 @@ const steps = [
   {
     title: 'ÉTAPE 01',
     content:
-      "Je paie les frais de dossier correspondant à la filière choisie via Mobile Money (Orange Money, MTN Mobile Money), carte bancaire ou PayPal.",
+      "Je paie les frais de dossier correspondant à la filière choisie via Mobile Money (Orange Money, MTN Mobile Money)",
   },
   {
     title: 'ÉTAPE 02',
@@ -33,7 +33,7 @@ function AdmissionIntro() {
   return (
     <Box id="admission" sx={{ py: 8 }}>
       <Container maxWidth="lg">
-        <SectionTitle label="À PROPOS DU CONCOURS" title="Admissions aux formations" />
+        <SectionTitle label="À PROPOS DES INSCRIPTIONS " title="Admissions aux formations" />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -42,10 +42,7 @@ function AdmissionIntro() {
           transition={{ duration: 0.6 }}
         >
           <Typography textAlign="center" sx={{ color: 'text.secondary', maxWidth: 800, mx: 'auto', mb: 5 }}>
-            L'IFPA forme des candidats aux métiers de la santé (soins infirmiers, aide-soignant,
-            sage-femme, technicien de laboratoire...) sur son/ses campus. Une formation
-            professionnalisante pour des hommes et des femmes techniquement compétents et
-            humainement responsables, au service des structures de santé.
+           L'Institut de Formation Professionnelle ATONNY (IFPA) forme des candidats aux métiers du paramédical et de la santé : Délégué Médical, Vendeur en Pharmacie, Auxiliaire de Vie, Assistant en Cabinet Médical et Aide Chimiste Biologiste. Une formation professionnalisante en 1 an (dont 3 mois de stage) qui prépare des hommes et des femmes techniquement compétents et humainement responsables, prêts à s'insérer dans le secteur paramédical. Nos formations sont sanctionnées par un DQP (Diplôme de Qualification Professionnelle) ou un CQP (Certificat de Qualification Professionnelle) reconnus à l'échelle nationale et internationale.
           </Typography>
         </motion.div>
 

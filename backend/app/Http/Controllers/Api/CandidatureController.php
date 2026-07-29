@@ -37,29 +37,31 @@ class CandidatureController extends Controller
             'niveau_etudes' => $validated['niveau_etudes'] ?? null,
             'filiere_id' => $validated['filiere_id'],
             'campus_id' => $validated['campus_id'] ?? null,
+                'ramettes_papier_payantes' => $request->boolean('ramettes_papier_payantes'),
             'statut' => 'soumis',
         ]);
 
         $documentsMap = [
-            'photo_identite' => 'photo_identite',
-            'acte_naissance' => 'acte_naissance',
-            'diplome' => 'diplome',
-            'certificat_medical' => 'certificat_medical',
-        ];
+    'demande_manuscrite' => 'demande_manuscrite',
+    'diplome_releve_notes' => 'diplome_releve_notes',
+    'acte_naissance' => 'acte_naissance',
+    'carte_identite' => 'carte_identite',
+    'photo_identite' => 'photo_identite',
+];
 
-        foreach ($documentsMap as $inputName => $type) {
-            if ($request->hasFile($inputName)) {
-                $file = $request->file($inputName);
-                $path = $file->store('candidatures/documents', 'public');
+foreach ($documentsMap as $inputName => $type) {
+    if ($request->hasFile($inputName)) {
+        $file = $request->file($inputName);
+        $path = $file->store('candidatures/documents', 'public');
 
-                CandidatureDocument::create([
-                    'candidature_id' => $candidature->id,
-                    'type' => $type,
-                    'fichier' => $path,
-                    'nom_original' => $file->getClientOriginalName(),
-                ]);
-            }
-        }
+        CandidatureDocument::create([
+            'candidature_id' => $candidature->id,
+            'type' => $type,
+            'fichier' => $path,
+            'nom_original' => $file->getClientOriginalName(),
+        ]);
+    }
+}
 
         $photoDoc = $candidature->documents()->where('type', 'photo_identite')->first();
         if ($photoDoc) {
@@ -94,6 +96,7 @@ class CandidatureController extends Controller
             'date_limite_paiement' => $candidature->date_limite_paiement,
             'dossier_complet' => $candidature->dossier_complet,
             'dernier_paiement' => $candidature->paiements->last()?->statut,
+            'ramettes_papier_payantes' => $candidature->ramettes_papier_payantes,
         ]);
     }
 
@@ -141,12 +144,13 @@ public function resoumettre(Request $request, Candidature $candidature)
         ], 422);
     }
 
-    $validated = $request->validate([
-        'photo_identite' => 'nullable|file|image|max:5120',
-        'acte_naissance' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-        'diplome' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-        'certificat_medical' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-    ]);
+   $validated = $request->validate([
+    'demande_manuscrite' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+    'diplome_releve_notes' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+    'acte_naissance' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+    'carte_identite' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+    'photo_identite' => 'nullable|file|image|max:5120',
+]);
 
     foreach ($validated as $type => $file) {
         if ($file) {
@@ -218,4 +222,5 @@ public function lier(Request $request)
         ],
     ]);
 }
+
 }

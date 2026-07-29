@@ -84,7 +84,7 @@ function PedagogicalApproach() {
               >
                 <Box
                   component="img"
-                  src="/assets/institut/approche-pedagogique-1.jpg"
+                  src="/assets/banners/admission-banners.jpg"
                   alt="Atelier pratique IFPA"
                   sx={{ width: '100%', borderRadius: 1, boxShadow: '0 6px 20px rgba(0,0,0,0.1)' }}
                 />
@@ -97,7 +97,7 @@ function PedagogicalApproach() {
               >
                 <Box
                   component="img"
-                  src="/assets/institut/approche-pedagogique-2.jpg"
+                  src="/assets/banners/admission-banners.jpg"
                   alt="Encadrement pédagogique IFPA"
                   sx={{ width: '100%', borderRadius: 1, boxShadow: '0 6px 20px rgba(0,0,0,0.1)' }}
                 />

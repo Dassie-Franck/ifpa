@@ -14,9 +14,9 @@ import 'swiper/css/pagination';
 const slides = [
   {
     image: '/assets/hero/hero1.jpg',
-    title: '1er concours : admissions 2026-2027',
-    cta: 'Résultats définitifs',
-    ctaLink: '/admission',
+    title: 'Inscription Ouvertes 2026-2027',
+    cta: 's\'incrire maintenant ',
+    ctaLink: '/inscription',
   },
   {
     image: '/assets/hero/hero2.jpg',

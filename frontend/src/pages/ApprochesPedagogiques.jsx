@@ -5,7 +5,7 @@ import PedagogicalApproach from '../components/institut/PedagogicalApproach';
 function ApprochesPedagogiques() {
   return (
     <Box>
-      <PageBanner image="/assets/banners/institut-banner.jpg" breadcrumbLabel="Nos approches pédagogiques" />
+      <PageBanner image="/assets/banners/banner-site.jpg" breadcrumbLabel="Nos approches pédagogiques" />
       <PedagogicalApproach />
     </Box>
   );

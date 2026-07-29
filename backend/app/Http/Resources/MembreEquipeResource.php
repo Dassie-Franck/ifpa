@@ -13,6 +13,7 @@ class MembreEquipeResource extends JsonResource
             'id' => $this->id,
             'nom_complet' => $this->nom_complet,
             'titre' => $this->titre,
+            'email' => $this->email,
             'specialite' => $this->specialite,
             'biographie' => $this->biographie,
             'type' => $this->type,

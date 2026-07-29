@@ -27,12 +27,12 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 // Bandeau secondaire (au-dessus du header) - §7.2 du cahier des charges
 const topBarLinks = [
-  { label: 'Moodle', path: '/espace-apprenant' },
-  { label: 'Actualité', path: '/actualites' },
-  { label: 'Alumni', path: '/alumni' },
-  { label: 'Faire un don', path: '/don' },
-  { label: 'Médiathèque', path: '/mediatheque' },
-  { label: 'Contact', path: '/contact' },
+  // { label: 'Moodle', path: '/espace-apprenant' },
+  { label: 'Actualité', path: '/institut/espace-presse' },
+  // { label: 'Alumni', path: '/alumni' },
+  // { label: 'Faire un don', path: '/don' },
+  // { label: 'Médiathèque', path: '/mediatheque' },
+  { label: 'Espace Etudiant', path: '/inscription/connexion' },
 ];
 
 // Menu principal - §7.1 du cahier des charges
@@ -54,7 +54,7 @@ const mainNavLinks = [
     path: '/partenariats',
     subLinks: [
       { label: 'Structures de stage partenaires', path: '/partenariats/structures-de-stage' },
-      { label: 'Opportunités professionnelles', path: '/partenariats/opportunites' },
+      // { label: 'Opportunités professionnelles', path: '/partenariats/opportunites' },
     ],
   },
   {
@@ -64,8 +64,8 @@ const mainNavLinks = [
       { label: 'Présentation du/des site(s)', path: '/vie-au-campus/presentation' },
     ],
   },
-  { label: 'ENTREPRISES', path: '/recruteurs' },
-  { label: 'FONDS DE SOLIDARITÉ', path: '/fonds-de-solidarite' },
+  // { label: 'ENTREPRISES', path: '/recruteurs' },
+  // { label: 'FONDS DE SOLIDARITÉ', path: '/fonds-de-solidarite' },
 ];
 
 function Navbar() {

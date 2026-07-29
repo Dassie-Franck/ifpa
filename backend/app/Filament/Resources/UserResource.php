@@ -89,4 +89,12 @@ class UserResource extends Resource
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
     }
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+{
+    return parent::getEloquentQuery()->whereIn('role', [
+        \App\Support\UserRoles::ADMIN,
+        \App\Support\UserRoles::AGENT_ADMISSIONS,
+        \App\Support\UserRoles::GESTIONNAIRE_CONTENU,
+    ]);
+}
 }

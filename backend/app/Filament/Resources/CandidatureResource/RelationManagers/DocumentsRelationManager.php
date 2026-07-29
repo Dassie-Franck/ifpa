@@ -19,10 +19,11 @@ class DocumentsRelationManager extends RelationManager
         return $form->schema([
             Forms\Components\Select::make('type')
                 ->options([
-                    'photo_identite' => 'Photo d\'identité',
+                    'demande_manuscrite' => "Demande d'admission manuscrite",
+                    'diplome_releve_notes' => 'Diplôme / Relevé de notes / Bordereau de réussite',
                     'acte_naissance' => 'Acte de naissance',
-                    'diplome' => 'Diplôme',
-                    'certificat_medical' => 'Certificat médical',
+                    'carte_identite' => "Carte nationale d'identité",
+                    'photo_identite' => "Photo d'identité",
                     'autre' => 'Autre',
                 ])
                 ->required(),
@@ -41,10 +42,11 @@ class DocumentsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('type')
                     ->formatStateUsing(fn (string $state) => match ($state) {
-                        'photo_identite' => "Photo d'identité",
+                        'demande_manuscrite' => "Demande manuscrite",
+                        'diplome_releve_notes' => 'Diplôme / Relevé de notes',
                         'acte_naissance' => 'Acte de naissance',
-                        'diplome' => 'Diplôme',
-                        'certificat_medical' => 'Certificat médical',
+                        'carte_identite' => "Carte d'identité",
+                        'photo_identite' => "Photo d'identité",
                         default => 'Autre',
                     })
                     ->badge(),

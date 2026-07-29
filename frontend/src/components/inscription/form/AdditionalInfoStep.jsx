@@ -8,8 +8,32 @@ import { motion } from 'framer-motion';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import ValidatedTextField from './ValidatedTextField';
+import { useState } from 'react';
+import { Checkbox, FormControlLabel } from '@mui/material';
+import RamettesInfoModal from './RamettesInfoModal';
 
 function AdditionalInfoStep({ formData, setFormData }) {
+  // --- AJOUT ÉTAT LOCAL ET GESTIONNAIRES ---
+  const [showRamettesModal, setShowRamettesModal] = useState(false);
+
+  const handleRamettesToggle = (e) => {
+    if (e.target.checked) {
+      setShowRamettesModal(true);
+    } else {
+      setFormData((prev) => ({ ...prev, ramettesPapierPayantes: false }));
+    }
+  };
+
+  const confirmRamettes = () => {
+    setFormData((prev) => ({ ...prev, ramettesPapierPayantes: true }));
+    setShowRamettesModal(false);
+  };
+
+  const cancelRamettes = () => {
+    setShowRamettesModal(false);
+  };
+  // --- FIN AJOUT ---
+
   const update = (field) => (eOrValue) => {
     const value = typeof eOrValue === 'string' ? eOrValue : eOrValue.target.value;
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -103,6 +127,34 @@ function AdditionalInfoStep({ formData, setFormData }) {
             />
           </motion.div>
         </Grid>
+
+        {/* --- AJOUT : CHECKBOX RAMETTES (juste avant la section parent/tuteur) --- */}
+        <Grid item xs={12}>
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.22 }}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={!!formData.ramettesPapierPayantes}
+                  onChange={handleRamettesToggle}
+                  color="primary"
+                />
+              }
+              label="Je souhaite que l'institut fournisse mes 2 ramettes de papier A4 80g (+ 7 000 FCFA)"
+            />
+            {formData.ramettesPapierPayantes && (
+              <Typography variant="caption" sx={{ display: 'block', color: 'primary.main', fontWeight: 600, ml: 4 }}>
+                ✓ 7 000 FCFA seront ajoutés à vos frais de dossier
+              </Typography>
+            )}
+          </motion.div>
+        </Grid>
+
+        <RamettesInfoModal
+          open={showRamettesModal}
+          onClose={cancelRamettes}
+          onConfirm={confirmRamettes}
+        />
+        {/* --- FIN AJOUT --- */}
 
         {/* Séparateur - contact parent/tuteur (§6.4) */}
         <Grid item xs={12}>

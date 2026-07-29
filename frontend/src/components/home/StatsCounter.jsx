@@ -76,10 +76,10 @@ function StatsCounter() {
             }}
           >
             <Typography variant="h5" sx={{ fontWeight: 800 }}>
-              2 Campus
+              1 Campus
             </Typography>
             <Typography variant="caption" sx={{ opacity: 0.9 }}>
-              Douala &amp; Pointe Noire
+              Douala  
             </Typography>
           </Box>
         </Grid>

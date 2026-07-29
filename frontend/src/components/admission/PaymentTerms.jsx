@@ -9,29 +9,35 @@ import AccordionList from '../common/AccordionList';
 // Montants et moyens à ajuster selon les tarifs réels définis par l'IFPA
 const paymentItems = [
   {
-    title: 'FRAIS DE DOSSIER',
-    content:
-      "10 000 FCFA pour le choix initial de filière. 5 000 FCFA par choix de filière supplémentaire.",
-  },
+  title: 'FRAIS D\'INSCRIPTION',
+  content: "100 000 FCFA à l'inscription pour chaque étudiant, toutes filières confondues.",
+  inclus: [
+    'Dossier médical gratuit',
+    'Assurance scolaire individuelle accident',
+    'Supports de cours et de formation offerts',
+    'Matières d\'œuvres et documentations professionnelles offertes',
+    'Blouse, tensiomètre, stéthoscope et ordinateur offerts'
+  ]
+},
   {
     title: 'PAIEMENT PAR MOBILE MONEY',
     content:
       "Orange Money et MTN Mobile Money. Un code de paiement s'affiche à l'écran ; suivez les instructions reçues par SMS pour valider la transaction.",
   },
-  {
-    title: 'PAIEMENT PAR CARTE BANCAIRE',
-    content:
-      "Paiement sécurisé par carte Visa ou Mastercard directement depuis le formulaire d'inscription en ligne.",
-  },
-  {
-    title: 'PAIEMENT PAR PAYPAL',
-    content:
-      "Pour les candidats résidant à l'étranger, le paiement via PayPal est également accepté.",
-  },
+  // {
+  //   title: 'PAIEMENT PAR CARTE BANCAIRE',
+  //   content:
+  //     "Paiement sécurisé par carte Visa ou Mastercard directement depuis le formulaire d'inscription en ligne.",
+  // },
+  // {
+  //   title: 'PAIEMENT PAR PAYPAL',
+  //   content:
+  //     "Pour les candidats résidant à l'étranger, le paiement via PayPal est également accepté.",
+  // },
   {
     title: 'EN CAS DE DIFFICULTÉ DE PAIEMENT',
     content:
-      "Contactez directement l'équipe des admissions via le bouton WhatsApp du campus concerné, en haut de cette page.",
+      "Contactez directement l'équipe des admissions via le bouton WhatsApp du campus concerné, en bas  de cette page.",
   },
 ];
 
@@ -39,7 +45,7 @@ function PaymentTerms() {
   return (
     <Box id="paiement" sx={{ py: 8, bgcolor: '#fafafa' }}>
       <Container maxWidth="md">
-        <SectionTitle label="À PROPOS DU CONCOURS" title="Modalités de paiement" />
+        <SectionTitle label="À PROPOS DES INSCRIPTION " title="Modalités de paiement" />
 
         <AccordionList items={paymentItems} defaultOpenIndex={0} />
 

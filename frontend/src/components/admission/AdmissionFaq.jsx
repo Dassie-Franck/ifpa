@@ -7,7 +7,7 @@ const faqColumn1 = [
   {
     title: 'AVEZ-VOUS DES FILIÈRES COMMERCIALES / GESTION ?',
     content:
-      "L'IFPA est un institut spécialisé exclusivement dans les formations paramédicales (soins infirmiers, aide-soignant, sage-femme, technicien de laboratoire, etc.). Aucune filière commerciale ou de gestion n'est proposée à ce jour.",
+      "L'Institut de Formation Professionnelle ATONNY (IFPA) forme des candidats aux métiers du paramédical et de la santé : Délégué Médical, Vendeur en Pharmacie, Auxiliaire de Vie, Assistant en Cabinet Médical et Aide Chimiste Biologiste. Aucune filière commerciale ou de gestion n'est proposée à ce jour.",
   },
   {
     title: "QUEL EST L'ÂGE LIMITE POUR POSTULER ?",

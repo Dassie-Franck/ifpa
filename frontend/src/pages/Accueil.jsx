@@ -8,7 +8,7 @@ import UpcomingEvents from '../components/home/UpcomingEvents';
 import Partners from '../components/home/Partners';
 import Testimonials from '../components/home/Testimonials';
 import AdmissionBanner from '../components/home/AdmissionBanner';
-
+import Diplome from '../components/home/Diplome';
 function Accueil() {
   return (
     <Box>
@@ -18,6 +18,7 @@ function Accueil() {
       <StatsCounter />
       <OurCampuses />
       <UpcomingEvents />
+      <Diplome />
       <Partners />
       <Testimonials />
       <AdmissionBanner />

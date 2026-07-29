@@ -28,8 +28,9 @@ export function CandidatAuthProvider({ children }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const login = async (email, password) => {
-    const response = await api.post('/candidat/login', { email, password });
+  // === MODIFICATION : ajout du paramètre website avec valeur par défaut ===
+  const login = async (email, password, website = '') => {
+    const response = await api.post('/candidat/login', { email, password, website });
     const { user: userData, token } = response.data;
 
     Cookies.set('candidat_token', token, { expires: 7 });
@@ -39,12 +40,14 @@ export function CandidatAuthProvider({ children }) {
     return userData;
   };
 
-  const register = async (name, email, password, passwordConfirmation) => {
+  // === MODIFICATION : ajout du paramètre website avec valeur par défaut ===
+  const register = async (name, email, password, passwordConfirmation, website = '') => {
     const response = await api.post('/candidat/register', {
       name,
       email,
       password,
       password_confirmation: passwordConfirmation,
+      website,
     });
     const { user: userData, token } = response.data;
 

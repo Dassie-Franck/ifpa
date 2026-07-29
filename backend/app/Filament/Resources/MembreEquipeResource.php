@@ -41,6 +41,10 @@ public static function canDelete($record): bool
         return $form->schema([
             Forms\Components\TextInput::make('nom_complet')->required(),
             Forms\Components\TextInput::make('titre')->required()->placeholder('Ex: Formateur en soins infirmiers'),
+            Forms\Components\TextInput::make('nom_complet')->required(),
+Forms\Components\TextInput::make('titre')->required()->placeholder('Ex: Formateur en soins infirmiers'),
+Forms\Components\TextInput::make('email')->email()->placeholder('[email protected]'),
+Forms\Components\TextInput::make('specialite'),
             Forms\Components\TextInput::make('specialite'),
             Forms\Components\Select::make('type')->options([
                 'formateur' => 'Formateur',
@@ -63,6 +67,9 @@ public static function canDelete($record): bool
                 Tables\Columns\TextColumn::make('titre'),
                 Tables\Columns\TextColumn::make('type')->badge(),
                 Tables\Columns\IconColumn::make('actif')->boolean(),
+                Tables\Columns\TextColumn::make('email')
+    ->searchable()
+    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->reorderable('ordre')
             ->defaultSort('ordre')

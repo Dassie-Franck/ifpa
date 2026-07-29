@@ -3,43 +3,57 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DescriptionIcon from '@mui/icons-material/Description';
 import { motion } from 'framer-motion';
 
-// Pièces justificatives à fournir selon la catégorie de filière (§6.4 du cahier des charges)
+// Pièces justificatives à fournir pour toutes les filières
 const documentColumns = [
   {
     category: 'Toutes filières',
-    subtitle: 'Documents communs obligatoires',
+    subtitle: 'Pièces obligatoires du dossier',
     documents: [
-      { label: "Acte de naissance", detail: 'Copie légalisée' },
-      { label: 'Certificat médical', detail: "Moins de 3 mois" },
-      { label: "Photo d'identité", detail: 'Format numérique' },
-      { label: "Pièce d'identité", detail: 'CNI ou carte scolaire' },
+      { label: "Demande d'admission manuscrite", detail: 'Adressée à la directrice' },
+      { label: 'Diplôme / Relevé de notes', detail: 'Ou bordereau de réussite' },
+      { label: 'Acte de naissance', detail: 'Photocopie' },
+      { label: "Carte nationale d'identité", detail: 'Photocopie' },
+      { label: "2 photos d'identité 4x4", detail: 'Moins de 3 mois' },
     ],
   },
   {
-    category: 'Soins infirmiers',
-    subtitle: 'Documents spécifiques',
+    category: 'Délégué Médical',
+    subtitle: "Conditions d'admission",
     documents: [
-      { label: 'Diplôme requis', detail: 'BEPC ou équivalent' },
-      { label: 'Relevé de notes', detail: 'Dernière classe suivie' },
-      { label: 'Lettre de motivation', detail: 'Facultative' },
+      { label: 'Niveau requis', detail: 'BACC +2, 3, 4' },
+      { label: "Frais d'inscription", detail: '400 000 FCFA' },
     ],
   },
   {
-    category: 'Sage-femme',
-    subtitle: 'Documents spécifiques',
+    category: 'Vendeur en Pharmacie',
+    subtitle: "Conditions d'admission",
     documents: [
-      { label: 'Diplôme requis', detail: 'BAC ou équivalent' },
-      { label: 'Relevé de notes', detail: 'Classe de terminale' },
-      { label: 'Certificat de scolarité', detail: 'Année en cours' },
+      { label: 'Niveau requis', detail: 'PROBATOIRE (toutes filières)' },
+      { label: "Frais d'inscription", detail: '250 000 FCFA' },
     ],
   },
   {
-    category: 'Technicien de laboratoire',
-    subtitle: 'Documents spécifiques',
+    category: 'Auxiliaire de Vie',
+    subtitle: "Conditions d'admission",
     documents: [
-      { label: 'Diplôme requis', detail: 'BAC scientifique' },
-      { label: 'Relevé de notes', detail: 'Classe de terminale' },
-      { label: 'Certificat de scolarité', detail: 'Année en cours' },
+      { label: 'Niveau requis', detail: 'BEPC' },
+      { label: "Frais d'inscription", detail: '250 000 FCFA' },
+    ],
+  },
+  {
+    category: 'Assistant en Cabinet Médical',
+    subtitle: "Conditions d'admission",
+    documents: [
+      { label: 'Niveau requis', detail: 'BEPC et PLUS (toutes filières)' },
+      { label: "Frais d'inscription", detail: '250 000 FCFA' },
+    ],
+  },
+  {
+    category: 'Aide Chimiste Biologiste',
+    subtitle: "Conditions d'admission",
+    documents: [
+      { label: 'Niveau requis', detail: 'BEPC et PLUS (toutes filières)' },
+      { label: "Frais d'inscription", detail: '250 000 FCFA' },
     ],
   },
 ];

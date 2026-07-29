@@ -5,10 +5,11 @@ import DocumentUploadField from '../form/DocumentUploadField';
 import { candidatureService } from '../../../services/candidatureService';
 
 const typeLabels = {
-  photo_identite: "Photo d'identité",
+  demande_manuscrite: "Demande d'admission manuscrite",
+  diplome_releve_notes: 'Diplôme / Relevé de notes / Bordereau de réussite',
   acte_naissance: 'Acte de naissance',
-  diplome: 'Diplôme',
-  certificat_medical: 'Certificat médical',
+  carte_identite: "Carte nationale d'identité",
+  photo_identite: "Photo d'identité",
 };
 
 // Affiche uniquement les documents marqués invalides (valide === false) et permet

@@ -16,6 +16,10 @@ import ApprochesPedagogiques from './pages/ApprochesPedagogiques';
 import NosEquipes from './pages/NosEquipes';
 import CandidatDashboard from './pages/CandidatDashboard';
 import InscriptionSuivi from './pages/InscriptionSuivi';
+import PresentationSite from './pages/PresentationSite';
+import EspacePresse from './pages/EspacePresse';
+import StructuresStage from './pages/StructuresStage';
+import Contact from './pages/Contact';
 function App() {
   return (
     <BrowserRouter>
@@ -30,6 +34,10 @@ function App() {
           <Route path="institut/qui-sommes-nous" element={<QuiSommesNous />} />
           <Route path="institut/pedagogicalApproach" element={<ApprochesPedagogiques />} />
           <Route path="institut/nos-equipes" element={<NosEquipes />} />
+          <Route path="vie-au-campus/presentation" element={<PresentationSite />} />
+          <Route path="institut/espace-presse" element={<EspacePresse />} />
+          <Route path="partenariats/structures-de-stage" element={<StructuresStage />} />
+          <Route path="contact" element={<Contact />} />
         </Route>
         <Route path="inscription" element={<InscriptionLayout />}>
        <Route index element={<EspaceInscriptionAccueil />} />

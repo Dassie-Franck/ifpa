@@ -4,8 +4,9 @@ import HubIcon from '@mui/icons-material/Hub';
 import DirectionsBikeIcon from '@mui/icons-material/DirectionsBike';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import { Link as RouterLink } from 'react-router-dom';
+import AnimatedSection from '../common/AnimatedSection'; // adaptez le chemin
 
-// 4 points forts (§6.1) - icônes et textes alignés sur la maquette
+// 4 points forts
 const features = [
   {
     icon: SchoolIcon,
@@ -25,17 +26,16 @@ const features = [
   },
 ];
 
-// Campus / antennes de formation - à remplacer par les vraies données IFPA
 const campuses = [
   {
-    name: 'Campus Principal',
+    name: 'Campus Principal Vue de l\'interieur',
     description: "Situé au cœur de la ville, dans un cadre propice à l'apprentissage et à la pratique clinique",
     image: '/assets/campus/campus1.jpg',
     link: '/vie-au-campus/presentation',
     color: 'primary.main',
   },
   {
-    name: 'Antenne 2',
+    name: 'Campus Principal Vue de l\'exterieur',
     description: 'Situé dans un environnement moderne et accessible aux structures de stage partenaires',
     image: '/assets/campus/campus2.jpg',
     link: '/vie-au-campus/presentation',
@@ -43,8 +43,6 @@ const campuses = [
   },
 ];
 
-// Laboratoire médical / Infrastructures - deux blocs alignés sur la même ligne
-// (à remplacer par vos vraies images de laboratoire et d'infrastructure)
 const facilities = [
   {
     name: 'Laboratoire Médical',
@@ -74,8 +72,8 @@ function OurCampuses() {
             gap: 5,
           }}
         >
-          {/* Colonne gauche : titre + 4 points */}
-          <Box sx={{ width: { xs: '100%', md: '41.6667%' }, flexShrink: 0 }}>
+          {/* Colonne gauche : titre + points forts - animation depuis la gauche */}
+          <AnimatedSection direction="left" delay={0.1} sx={{ width: { xs: '100%', md: '41.6667%' }, flexShrink: 0 }}>
             <Typography
               variant="overline"
               display="block"
@@ -94,7 +92,18 @@ function OurCampuses() {
               {features.map((feature, index) => {
                 const Icon = feature.icon;
                 return (
-                  <Stack direction="row" spacing={2} alignItems="flex-start" key={index}>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    alignItems="flex-start"
+                    key={index}
+                    sx={{
+                      // Animation de chaque point avec un délai progressif via Framer Motion ? 
+                      // On peut les envelopper individuellement, mais pour simplifier on laisse l'ensemble de la colonne s'animer.
+                      // Cependant, pour un effet cascade, on peut aussi utiliser AnimatedSection sur chaque élément.
+                      // Je propose de les laisser tels quels, la colonne s'anime globalement.
+                    }}
+                  >
                     <Box
                       sx={{
                         bgcolor: '#7a1f1f',
@@ -106,6 +115,11 @@ function OurCampuses() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexShrink: 0,
+                        transition: 'transform 0.3s, box-shadow 0.3s',
+                        '&:hover': {
+                          transform: 'scale(1.1) rotate(5deg)',
+                          boxShadow: '0 0 15px rgba(122,31,31,0.4)',
+                        },
                       }}
                     >
                       <Icon sx={{ fontSize: 22 }} />
@@ -117,10 +131,10 @@ function OurCampuses() {
                 );
               })}
             </Stack>
-          </Box>
+          </AnimatedSection>
 
-          {/* Colonne droite : mosaïque 2x2 en diagonale (texte/image/image/texte) */}
-          <Box sx={{ width: { xs: '100%', md: '58.3333%' }, flexShrink: 0 }}>
+          {/* Colonne droite : mosaïque - animation depuis la droite */}
+          <AnimatedSection direction="right" delay={0.2} sx={{ width: { xs: '100%', md: '58.3333%' }, flexShrink: 0 }}>
             <Box
               sx={{
                 display: 'grid',
@@ -130,7 +144,7 @@ function OurCampuses() {
                 overflow: 'hidden',
               }}
             >
-              {/* Cellule 1 : texte du campus 0 (haut-gauche) */}
+              {/* Cellule 1 : texte campus 0 */}
               <Box
                 sx={{
                   bgcolor: campuses[0].color,
@@ -139,6 +153,11 @@ function OurCampuses() {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
+                  transition: 'transform 0.3s, box-shadow 0.3s',
+                  '&:hover': {
+                    transform: 'scale(1.02)',
+                    boxShadow: '0 8px 30px rgba(0,0,0,0.2)',
+                  },
                 }}
               >
                 <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
@@ -158,25 +177,35 @@ function OurCampuses() {
                 </Button>
               </Box>
 
-              {/* Cellule 2 : image du campus 0 (haut-droite) */}
+              {/* Cellule 2 : image campus 0 */}
               <Box
                 sx={{
                   backgroundImage: `url(${campuses[0].image})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
+                  transition: 'transform 0.4s, filter 0.4s',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                    filter: 'brightness(1.1)',
+                  },
                 }}
               />
 
-              {/* Cellule 3 : image du campus 1 (bas-gauche) */}
+              {/* Cellule 3 : image campus 1 */}
               <Box
                 sx={{
                   backgroundImage: `url(${campuses[1].image})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
+                  transition: 'transform 0.4s, filter 0.4s',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                    filter: 'brightness(1.1)',
+                  },
                 }}
               />
 
-              {/* Cellule 4 : texte du campus 1 (bas-droite) */}
+              {/* Cellule 4 : texte campus 1 */}
               <Box
                 sx={{
                   bgcolor: campuses[1].color,
@@ -185,6 +214,11 @@ function OurCampuses() {
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
+                  transition: 'transform 0.3s, box-shadow 0.3s',
+                  '&:hover': {
+                    transform: 'scale(1.02)',
+                    boxShadow: '0 8px 30px rgba(0,0,0,0.2)',
+                  },
                 }}
               >
                 <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
@@ -204,48 +238,59 @@ function OurCampuses() {
                 </Button>
               </Box>
             </Box>
-          </Box>
+          </AnimatedSection>
         </Box>
 
-        {/* Laboratoire Médical / Infrastructures - alignés sur la même ligne */}
+        {/* Laboratoire / Infrastructures - chaque carte avec animation vers le haut */}
         <Grid container spacing={2} sx={{ mt: 6 }}>
-          {facilities.map((facility) => (
+          {facilities.map((facility, index) => (
             <Grid item xs={12} sm={6} key={facility.name}>
-              <Box
-                sx={{
-                  height: 300,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  borderRadius: 1,
-                  overflow: 'hidden',
-                }}
-              >
+              <AnimatedSection direction="up" delay={0.3 + index * 0.15}>
                 <Box
                   sx={{
-                    flex: 1,
-                    backgroundImage: `url(${facility.image})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
+                    height: 300,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    borderRadius: 1,
+                    overflow: 'hidden',
+                    transition: 'transform 0.3s, box-shadow 0.3s',
+                    '&:hover': {
+                      transform: 'translateY(-8px) scale(1.02)',
+                      boxShadow: '0 12px 40px rgba(0,0,0,0.2)',
+                    },
                   }}
-                />
-                <Box sx={{ bgcolor: facility.color, color: '#fff', p: 2 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>
-                    {facility.name.toUpperCase()}
-                  </Typography>
-                  <Typography variant="caption" sx={{ display: 'block', opacity: 0.9, mb: 1.5 }}>
-                    {facility.description}
-                  </Typography>
-                  <Button
-                    component={RouterLink}
-                    to={facility.link}
-                    size="small"
-                    variant="outlined"
-                    sx={{ color: '#fff', borderColor: '#fff', fontSize: '0.7rem' }}
-                  >
-                    En savoir +
-                  </Button>
+                >
+                  <Box
+                    sx={{
+                      flex: 1,
+                      backgroundImage: `url(${facility.image})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      transition: 'transform 0.5s',
+                      '&:hover': {
+                        transform: 'scale(1.08)',
+                      },
+                    }}
+                  />
+                  <Box sx={{ bgcolor: facility.color, color: '#fff', p: 2 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 0.5 }}>
+                      {facility.name.toUpperCase()}
+                    </Typography>
+                    <Typography variant="caption" sx={{ display: 'block', opacity: 0.9, mb: 1.5 }}>
+                      {facility.description}
+                    </Typography>
+                    <Button
+                      component={RouterLink}
+                      to={facility.link}
+                      size="small"
+                      variant="outlined"
+                      sx={{ color: '#fff', borderColor: '#fff', fontSize: '0.7rem' }}
+                    >
+                      En savoir +
+                    </Button>
+                  </Box>
                 </Box>
-              </Box>
+              </AnimatedSection>
             </Grid>
           ))}
         </Grid>

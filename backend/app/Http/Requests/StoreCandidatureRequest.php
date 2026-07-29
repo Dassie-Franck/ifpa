@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Candidature;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Validator;
 
 class StoreCandidatureRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class StoreCandidatureRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
+        return array_merge($this->honeypotRules(), [
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
             'date_naissance' => 'nullable|date',
@@ -25,21 +27,54 @@ class StoreCandidatureRequest extends FormRequest
             'filiere_id' => 'required|exists:filieres,id',
             'campus_id' => 'nullable|exists:campus,id',
 
-            'photo_identite' => 'required|file|image|max:5120',
+            'demande_manuscrite' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'diplome_releve_notes' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'acte_naissance' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'diplome' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'certificat_medical' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-        ];
+            'carte_identite' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'photo_identite' => 'required|file|image|max:5120',
+            'ramettes_papier_payantes' => 'nullable|boolean',
+        ]);
     }
 
     public function messages(): array
     {
         return [
             'filiere_id.required' => 'Veuillez sélectionner une filière.',
-            'photo_identite.required' => "La photo d'identité est obligatoire.",
-            'acte_naissance.required' => "L'acte de naissance est obligatoire.",
-            'diplome.required' => 'Le diplôme est obligatoire.',
-            'certificat_medical.required' => 'Le certificat médical est obligatoire.',
+            'demande_manuscrite.required' => 'La demande d\'admission manuscrite est obligatoire.',
+            'diplome_releve_notes.required' => 'Le diplôme, relevé de notes ou bordereau de réussite est obligatoire.',
+            'acte_naissance.required' => 'L\'acte de naissance est obligatoire.',
+            'carte_identite.required' => 'La carte nationale d\'identité est obligatoire.',
+            'photo_identite.required' => 'La photo d\'identité est obligatoire.',
         ];
+    }
+
+    /**
+     * Empêche un second dépôt actif pour la même filière avec le même email —
+     * mais autorise un nouveau dépôt si l'ancien a été rejeté ou a expiré,
+     * ou pour une filière différente.
+     */
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            $email = $this->input('email');
+            $filiereId = $this->input('filiere_id');
+
+            if (! $email || ! $filiereId) {
+                return;
+            }
+
+            $dejaEnCours = Candidature::where('email', $email)
+                ->where('filiere_id', $filiereId)
+                ->whereIn('statut', ['soumis', 'paiement_en_attente', 'dossier_valide', 'admis'])
+                ->exists();
+
+            if ($dejaEnCours) {
+                $validator->errors()->add(
+                    'email',
+                    'Une candidature est déjà en cours avec cet email pour cette filière. '
+                    . 'Connectez-vous à votre espace candidat pour suivre son évolution.'
+                );
+            }
+        });
     }
 }
