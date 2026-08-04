@@ -12,14 +12,12 @@ function DebouchesTab({ content }) {
         </Box>
       </motion.div>
       {content ? (
-        <Box
-          sx={{ color: 'text.secondary', lineHeight: 1.9, '& p': { mb: 2 } }}
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
+       <SafeHtml html={content} sx={{ color: 'text.secondary', lineHeight: 1.9 }} />
       ) : (
         <Typography sx={{ color: 'text.disabled', fontStyle: 'italic' }}>
           Les débouchés professionnels seront bientôt détaillés.
         </Typography>
+        
       )}
     </Box>
   );

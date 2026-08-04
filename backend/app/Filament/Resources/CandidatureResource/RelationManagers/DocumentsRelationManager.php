@@ -59,10 +59,10 @@ class DocumentsRelationManager extends RelationManager
             ])
             ->actions([
                 Tables\Actions\Action::make('voir')
-                    ->label('Voir')
-                    ->icon('heroicon-o-eye')
-                    ->url(fn ($record) => \Storage::url($record->fichier))
-                    ->openUrlInNewTab(),
+    ->label('Voir')
+    ->icon('heroicon-o-eye')
+    ->url(fn ($record) => route('admin.documents.voir', $record))
+    ->openUrlInNewTab(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ]);

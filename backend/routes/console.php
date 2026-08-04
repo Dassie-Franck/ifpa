@@ -9,3 +9,5 @@ Artisan::command('inspire', function () {
 
 Schedule::command('candidatures:relancer')->hourly();
 Schedule::command('candidatures:expirer')->hourly();
+Schedule::command('activitylog:purge-custom')->monthly();
+Schedule::command('sanctum:prune-expired-custom')->daily();

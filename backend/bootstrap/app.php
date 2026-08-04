@@ -11,9 +11,19 @@ return Application::configure(basePath: dirname(__DIR__))
          api: __DIR__.'/../routes/api.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
-    })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        //
-    })->create();
+    ->withMiddleware(function (Middleware $middleware) {
+    $middleware->alias([
+        'cache.api' => \App\Http\Middleware\CacheApiResponse::class,
+    ]);
+
+    $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
+})
+  ->withExceptions(function (Exceptions $exceptions) {
+    $exceptions->render(function (\Illuminate\Auth\AuthenticationException $e, $request) {
+        if ($request->is('api/*') || $request->expectsJson()) {
+            return response()->json([
+                'message' => 'Non authentifié.',
+            ], 401);
+        }
+    });
+})->create();

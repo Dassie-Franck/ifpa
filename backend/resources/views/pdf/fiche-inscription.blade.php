@@ -74,9 +74,9 @@
             Référence du dossier : {{ $candidature->reference }}
         </div>
 
-        @if ($candidature->photo_identite)
+       @if ($photoAbsolutePath && file_exists($photoAbsolutePath))
             <div class="photo-box">
-                <img src="{{ public_path('storage/' . $candidature->photo_identite) }}" alt="Photo d'identité">
+                <img src="{{ $photoAbsolutePath }}" alt="Photo d'identité">
             </div>
         @endif
 

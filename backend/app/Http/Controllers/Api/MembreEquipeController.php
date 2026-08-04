@@ -9,9 +9,9 @@ use App\Models\MembreEquipe;
 class MembreEquipeController extends Controller
 {
     public function index()
-    {
-        return MembreEquipeResource::collection(
-            MembreEquipe::where('actif', true)->orderBy('ordre')->get()
-        );
-    }
+{
+    return MembreEquipeResource::collection(
+        MembreEquipe::where('actif', true)->orderBy('ordre')->paginate(20)
+    );
+}
 }

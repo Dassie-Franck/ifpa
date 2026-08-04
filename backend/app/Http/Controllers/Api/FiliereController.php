@@ -9,16 +9,16 @@ use Illuminate\Http\Request;
 
 class FiliereController extends Controller
 {
-    public function index(Request $request)
-    {
-        $query = Filiere::query()->where('actif', true)->orderBy('ordre');
+   public function index(Request $request)
+{
+    $query = Filiere::query()->where('actif', true)->orderBy('ordre');
 
-        if ($request->filled('search')) {
-            $query->where('titre', 'like', '%' . $request->input('search') . '%');
-        }
-
-        return FiliereResource::collection($query->get());
+    if ($request->filled('search')) {
+        $query->where('titre', 'like', '%' . $request->input('search') . '%');
     }
+
+    return FiliereResource::collection($query->paginate(20));
+}
 
     public function show(string $slug)
     {

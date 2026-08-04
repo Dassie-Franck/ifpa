@@ -8,14 +8,21 @@ const api = axios.create({
   },
 });
 
-api.interceptors.request.use((config) => {
-  const token = Cookies.get('candidat_token');
+// Si le token est expiré/invalide (401), nettoie la session locale et redirige
+// proprement vers la connexion plutôt que de laisser l'app dans un état incohérent.
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      Cookies.remove('candidat_token');
+      delete api.defaults.headers.common['Authorization'];
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+      if (!window.location.pathname.includes('/connexion')) {
+        window.location.href = '/inscription/connexion';
+      }
+    }
+    return Promise.reject(error);
   }
-
-  return config;
-});
+);
 
 export default api;

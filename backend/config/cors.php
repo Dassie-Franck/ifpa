@@ -30,9 +30,12 @@ return [
     'max_age' => 0,
 
     'supports_credentials' => false,
-    'paths' => ['api/*'],
+
+     'paths' => ['api/*'],
     'allowed_methods' => ['*'],
-    'allowed_origins' => ['http://localhost:5173'], // URL de votre frontend React en dev
+
+    'allowed_origins' => array_filter(explode(',', env('CORS_ALLOWED_ORIGINS', 'http://localhost:5173'))),
+
     'allowed_origins_patterns' => [],
     'allowed_headers' => ['*'],
     'exposed_headers' => [],

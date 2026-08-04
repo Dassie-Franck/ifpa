@@ -21,6 +21,7 @@
     "@react-google-maps/api": "^2.20.8",
     "axios": "^1.18.1",
     "dayjs": "^1.11.21",
+    "dompurify": "^3.4.12",
     "framer-motion": "^12.42.2",
     "js-cookie": "^3.0.8",
     "lucide-react": "^1.25.0",
@@ -32,7 +33,7 @@
     "react-intersection-observer": "^10.1.0",
     "react-modal": "^3.16.3",
     "react-phone-number-input": "^3.4.17",
-    "react-router-dom": "^7.18.1",
+    "react-router-dom": "^7.18.2",
     "react-router-hash-link": "^2.4.3",
     "swiper": "^14.0.6",
     "yup": "^1.7.1"

@@ -9,9 +9,9 @@ use App\Models\Partenaire;
 class PartenaireController extends Controller
 {
     public function index()
-    {
-        return PartenaireResource::collection(
-            Partenaire::where('actif', true)->orderBy('ordre')->get()
-        );
-    }
+{
+    return PartenaireResource::collection(
+        Partenaire::where('actif', true)->orderBy('ordre')->paginate(20)
+    );
+}
 }

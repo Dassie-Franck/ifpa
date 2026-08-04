@@ -19,12 +19,14 @@ class FicheInscriptionController extends Controller
             ->firstOrFail();
 
         $pdf = Pdf::loadView('pdf.fiche-inscription', [
-            'candidature' => $candidature,
-        ])->setPaper('a4', 'portrait');
+    'candidature' => $candidature,
+    'photoAbsolutePath' => $candidature->photo_identite
+        ? \Storage::disk('candidatures')->path($candidature->photo_identite)
+        : null,
+])->setPaper('a4', 'portrait');
 
         $nomFichier = 'Fiche_Inscription_' . $candidature->reference . '.pdf';
 
         return $pdf->download($nomFichier);
     }
 }
- 

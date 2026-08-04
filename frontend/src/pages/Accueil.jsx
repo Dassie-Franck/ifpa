@@ -9,6 +9,7 @@ import Partners from '../components/home/Partners';
 import Testimonials from '../components/home/Testimonials';
 import AdmissionBanner from '../components/home/AdmissionBanner';
 import Diplome from '../components/home/Diplome';
+// import HomeMaps from '../components/home/HomeMaps';
 function Accueil() {
   return (
     <Box>
@@ -22,6 +23,7 @@ function Accueil() {
       <Partners />
       <Testimonials />
       <AdmissionBanner />
+      {/* <HomeMaps /> */}
     </Box>
   );
 }

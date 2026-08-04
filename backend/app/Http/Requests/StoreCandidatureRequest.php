@@ -5,36 +5,42 @@ namespace App\Http\Requests;
 use App\Models\Candidature;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
+use App\Rules\ValidDocumentContent;
+use App\Rules\ValidImageContent;
+use App\Http\Requests\Concerns\HasHoneypot;
+
 
 class StoreCandidatureRequest extends FormRequest
 {
+    use HasHoneypot;
     public function authorize(): bool
     {
         return true;
     }
 
-    public function rules(): array
-    {
-        return array_merge($this->honeypotRules(), [
-            'nom' => 'required|string|max:255',
-            'prenom' => 'required|string|max:255',
-            'date_naissance' => 'nullable|date',
-            'sexe' => 'nullable|in:M,F',
-            'email' => 'required|email|max:255',
-            'telephone' => 'required|string|max:30',
-            'adresse' => 'nullable|string|max:500',
-            'niveau_etudes' => 'nullable|string|max:255',
-            'filiere_id' => 'required|exists:filieres,id',
-            'campus_id' => 'nullable|exists:campus,id',
 
-            'demande_manuscrite' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'diplome_releve_notes' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'acte_naissance' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'carte_identite' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-            'photo_identite' => 'required|file|image|max:5120',
-            'ramettes_papier_payantes' => 'nullable|boolean',
-        ]);
-    }
+public function rules(): array
+{
+    return array_merge($this->honeypotRules(), [
+        'nom' => 'required|string|max:255',
+        'prenom' => 'required|string|max:255',
+        'date_naissance' => 'nullable|date',
+        'sexe' => 'nullable|in:M,F',
+        'email' => 'required|email|max:255',
+        'telephone' => 'required|string|max:30',
+        'adresse' => 'nullable|string|max:500',
+        'niveau_etudes' => 'nullable|string|max:255',
+        'filiere_id' => 'required|exists:filieres,id',
+        'campus_id' => 'nullable|exists:campus,id',
+        'ramettes_papier_payantes' => 'nullable|boolean',
+
+        'demande_manuscrite' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120', new ValidDocumentContent],
+        'diplome_releve_notes' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120', new ValidDocumentContent],
+        'acte_naissance' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120', new ValidDocumentContent],
+        'carte_identite' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120', new ValidDocumentContent],
+        'photo_identite' => ['required', 'file', 'image', 'max:5120', new ValidImageContent],
+    ]);
+}
 
     public function messages(): array
     {

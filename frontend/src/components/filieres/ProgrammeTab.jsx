@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
+import SafeHtml from '../common/SafeHtml';
 
 function ProgrammeTab({ content }) {
   return (
@@ -9,13 +10,10 @@ function ProgrammeTab({ content }) {
           <Typography variant="h5" sx={{ color: 'primary.main', fontWeight: 800 }}>
             Le Programme
           </Typography>
-        </Box>
+        </Box >
       </motion.div>
       {content ? (
-        <Box
-          sx={{ color: 'text.secondary', lineHeight: 1.9, '& p': { mb: 2 } }}
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
+        <SafeHtml html={content} sx={{ color: 'text.secondary', lineHeight: 1.9 }} />
       ) : (
         <Typography sx={{ color: 'text.disabled', fontStyle: 'italic' }}>
           Le détail du programme sera bientôt disponible.

@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Candidature extends Model
 {
-    use HasFactory;
+    use HasFactory , LogsActivity;
 
   protected $fillable = [
     'user_id', 'reference', 'nom', 'prenom', 'date_naissance', 'sexe', 'email', 'telephone',
@@ -65,4 +67,12 @@ public function agentTraitant()
 {
     return $this->belongsTo(User::class);
 }
+public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['statut', 'motif_rejet', 'dossier_complet', 'traite_par'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->useLogName('candidature');
+    }
 }

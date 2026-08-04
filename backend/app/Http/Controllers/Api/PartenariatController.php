@@ -9,14 +9,10 @@ use Illuminate\Http\Request;
 
 class PartenariatController extends Controller
 {
-    public function index(Request $request)
-    {
-        $query = Partenariat::where('actif', true)->orderBy('ordre');
-
-        if ($request->filled('type')) {
-            $query->where('type', $request->input('type'));
-        }
-
-        return PartenariatApiResource::collection($query->get());
-    }
+    public function index()
+{
+    return PartenariatApiResource::collection(
+        Partenariat::where('actif', true)->orderBy('ordre')->paginate(20)
+    );
+}
 }

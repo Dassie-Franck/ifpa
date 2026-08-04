@@ -9,11 +9,11 @@ use App\Models\Campus;
 class CampusController extends Controller
 {
     public function index()
-    {
-        return CampusResource::collection(
-            Campus::where('actif', true)->orderBy('ordre')->get()
-        );
-    }
+{
+    return CampusResource::collection(
+        Campus::where('actif', true)->orderBy('ordre')->paginate(20)
+    );
+}
 
     public function show(string $slug)
     {

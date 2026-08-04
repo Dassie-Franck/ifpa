@@ -9,14 +9,18 @@ use App\Models\CandidatureDocument;
 use Illuminate\Http\Request;
 use App\Notifications\DossierResoumisNotification;
 use App\Models\User;
+use App\Rules\ValidDocumentContent;
+use App\Rules\ValidImageContent;
+use App\Services\ImageCompressionService;
+
 class CandidatureController extends Controller
 {
     /**
      * Crée le dossier de candidature + upload des documents.
      * Statut initial : "soumis" — en attente d'étude par l'équipe admissions.
      */
-    public function store(StoreCandidatureRequest $request)
-    {
+    public function store(StoreCandidatureRequest $request, ImageCompressionService $compression)
+{
     logger()->info('DEBUG CANDIDATURE', [
     'user' => $request->user(),
     'user_id' => optional($request->user())->id,
@@ -49,17 +53,25 @@ class CandidatureController extends Controller
     'photo_identite' => 'photo_identite',
 ];
 
-foreach ($documentsMap as $inputName => $type) {
-    if ($request->hasFile($inputName)) {
-        $file = $request->file($inputName);
-        $path = $file->store('candidatures/documents', 'public');
+ foreach ($documentsMap as $inputName => $type) {
+        if ($request->hasFile($inputName)) {
+            $file = $request->file($inputName);
 
-        CandidatureDocument::create([
-            'candidature_id' => $candidature->id,
-            'type' => $type,
-            'fichier' => $path,
-            'nom_original' => $file->getClientOriginalName(),
-        ]);
+            if ($type === 'photo_identite') {
+                $contenuCompresse = $compression->compresser($file);
+                $nomFichier = 'documents/' . uniqid() . '.jpg';
+                \Storage::disk('candidatures')->put($nomFichier, $contenuCompresse);
+                $path = $nomFichier;
+            } else {
+                $path = $file->store('documents', 'candidatures');
+            }
+
+            CandidatureDocument::create([
+                'candidature_id' => $candidature->id,
+                'type' => $type,
+                'fichier' => $path,
+                'nom_original' => $file->getClientOriginalName(),
+            ]);
     }
 }
 
@@ -144,12 +156,12 @@ public function resoumettre(Request $request, Candidature $candidature)
         ], 422);
     }
 
-   $validated = $request->validate([
-    'demande_manuscrite' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-    'diplome_releve_notes' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-    'acte_naissance' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-    'carte_identite' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-    'photo_identite' => 'nullable|file|image|max:5120',
+  $validated = $request->validate([
+    'demande_manuscrite' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120', new ValidDocumentContent],
+    'diplome_releve_notes' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120', new ValidDocumentContent],
+    'acte_naissance' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120', new ValidDocumentContent],
+    'carte_identite' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120', new ValidDocumentContent],
+    'photo_identite' => ['nullable', 'file', 'image', 'max:5120', new ValidImageContent],
 ]);
 
     foreach ($validated as $type => $file) {
@@ -157,11 +169,10 @@ public function resoumettre(Request $request, Candidature $candidature)
             // Supprime l'ancien document invalide de ce type et le remplace
             $ancien = $candidature->documents()->where('type', $type)->first();
             if ($ancien) {
-                \Storage::disk('public')->delete($ancien->fichier);
-                $ancien->delete();
+                \Storage::disk('candidatures')->delete($ancien->fichier);
             }
 
-            $path = $file->store('candidatures/documents', 'public');
+           $path = $file->store('documents', 'candidatures');
             $candidature->documents()->create([
                 'type' => $type,
                 'fichier' => $path,

@@ -8,6 +8,7 @@ export const contactService = {
       sujet: formData.sujet,
       message: formData.message,
       website, // honeypot
+      'g-recaptcha-response': recaptchaToken, // reCAPTCHA
     };
 
     const response = await api.post('/contact', payload);

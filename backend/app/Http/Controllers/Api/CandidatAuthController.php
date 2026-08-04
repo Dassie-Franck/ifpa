@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
+use Spatie\Activitylog\Facades\LogActivity; 
 
 class CandidatAuthController extends Controller
 {
@@ -20,7 +21,6 @@ class CandidatAuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => ['required', 'confirmed', Password::min(8)],
-            // Honeypot — voir étape 2, champ 'website' doit rester vide
             'website' => 'prohibited',
         ]);
 
@@ -44,11 +44,9 @@ class CandidatAuthController extends Controller
         $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
-            'website' => 'prohibited', // honeypot
+            'website' => 'prohibited',
         ]);
 
-        // Un seul compte candidat par email garanti par la contrainte unique en base —
-        // first() est désormais fiable, mais on garde une vérification défensive.
         $user = User::where('email', $validated['email'])
             ->where('role', 'candidat')
             ->first();
@@ -60,6 +58,12 @@ class CandidatAuthController extends Controller
         // Vérifie si le compte est actuellement verrouillé
         if ($user->verrouille_jusqu_a && $user->verrouille_jusqu_a->isFuture()) {
             $minutesRestantes = now()->diffInMinutes($user->verrouille_jusqu_a);
+            // ========== JOURNALISATION VERROUILLAGE ==========
+            LogActivity::activity('auth')
+                ->causedBy($user)
+                ->withProperties(['ip' => $request->ip()])
+                ->log('Compte verrouillé après tentatives multiples');
+            // =================================================
             throw ValidationException::withMessages([
                 'email' => ["Compte temporairement verrouillé suite à plusieurs échecs. Réessayez dans {$minutesRestantes} minute(s)."],
             ]);
@@ -74,10 +78,23 @@ class CandidatAuthController extends Controller
                     'tentatives_echouees' => 0,
                 ]);
 
+                // ========== JOURNALISATION VERROUILLAGE (après dépassement) ==========
+                LogActivity::activity('auth')
+                    ->causedBy($user)
+                    ->withProperties(['ip' => $request->ip()])
+                    ->log('Compte verrouillé après tentatives multiples');
+                // ====================================================================
+
                 throw ValidationException::withMessages([
                     'email' => ['Trop de tentatives échouées. Compte verrouillé ' . self::DUREE_VERROUILLAGE_MINUTES . ' minutes.'],
                 ]);
             }
+
+            // ========== JOURNALISATION ÉCHEC ==========
+            LogActivity::activity('auth')
+                ->withProperties(['email' => $validated['email'], 'ip' => $request->ip()])
+                ->log('Tentative de connexion échouée');
+            // ==========================================
 
             throw ValidationException::withMessages(['email' => ['Identifiants incorrects.']]);
         }
@@ -86,6 +103,13 @@ class CandidatAuthController extends Controller
         $user->update(['tentatives_echouees' => 0, 'verrouille_jusqu_a' => null]);
 
         $token = $user->createToken('candidat-token')->plainTextToken;
+
+        // ========== JOURNALISATION SUCCÈS ==========
+        LogActivity::activity('auth')
+            ->causedBy($user)
+            ->withProperties(['ip' => $request->ip()])
+            ->log('Connexion réussie');
+        // ==========================================
 
         return response()->json([
             'user' => ['id' => $user->id, 'name' => $user->name, 'email' => $user->email],

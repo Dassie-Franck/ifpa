@@ -76,5 +76,22 @@ return [
     'links' => [
         public_path('storage') => storage_path('app/public'),
     ],
+    'candidatures' => [
+    'driver' => 'local',
+    'root' => storage_path('app/private/candidatures'),
+    'visibility' => 'private',
+    'throw' => false,
+],
+
+'disks' => [
+    // ... autres disques (local, public, etc.)
+
+    'candidatures' => [
+        'driver' => 'local',
+        'root' => storage_path('app/private/candidatures'),
+        'visibility' => 'private',
+        'throw' => false,
+    ],
+],
 
 ];
