@@ -16,6 +16,7 @@ use App\Models\GalerieItem;
 use App\Models\MembreEquipe;
 use App\Models\DocumentInstitutionnel;
 use App\Observers\ClearApiCacheObserver;
+
 class AppServiceProvider extends ServiceProvider
 {
     public function boot(): void

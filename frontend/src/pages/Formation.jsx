@@ -24,12 +24,23 @@ function Formation() {
           <Typography
             variant="overline"
             display="block"
-            textAlign="center"
-            sx={{ color: 'text.secondary', letterSpacing: 2, mb: 1 }}
+            sx={{ 
+              color: 'text.secondary', 
+              letterSpacing: 2, 
+              mb: 1,
+              textAlign: 'center' //  Correction : textAlign dans sx
+            }}
           >
             CHOISIR SA FORMATION
           </Typography>
-          <Typography variant="h4" textAlign="center" sx={{ fontWeight: 800, mb: 5 }}>
+          <Typography 
+            variant="h4" 
+            sx={{ 
+              fontWeight: 800, 
+              mb: 5,
+              textAlign: 'center' //  Correction : textAlign dans sx
+            }}
+          >
             Nos{' '}
             <Box component="span" sx={{ position: 'relative' }}>
               filières
@@ -60,7 +71,13 @@ function Formation() {
         )}
 
         {!loading && !error && filieres?.length === 0 && (
-          <Typography textAlign="center" sx={{ color: 'text.secondary', py: 4 }}>
+          <Typography 
+            sx={{ 
+              textAlign: 'center', // Correction : textAlign dans sx
+              color: 'text.secondary', 
+              py: 4 
+            }}
+          >
             Aucune filière ne correspond à votre recherche.
           </Typography>
         )}
@@ -96,14 +113,24 @@ function Formation() {
                 borderRadius: 1,
                 '& fieldset': { border: 'none' },
               }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton sx={{ bgcolor: 'primary.dark', color: '#fff', borderRadius: 1, '&:hover': { bgcolor: 'primary.dark' } }}>
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
+              // Correction : InputProps correctement placé sur TextField
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton 
+                        sx={{ 
+                          bgcolor: 'primary.dark', 
+                          color: '#fff', 
+                          borderRadius: 1, 
+                          '&:hover': { bgcolor: 'primary.dark' } 
+                        }}
+                      >
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }
               }}
             />
           </Container>

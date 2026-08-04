@@ -236,16 +236,17 @@ class CandidatureResource extends Resource
                                 ->options(
                                     $record->documents->mapWithKeys(fn ($doc) => [
                                         $doc->id => match ($doc->type) {
-                                            'photo_identite' => "Photo d'identité",
+                                            'photo_identite' => "Photo 4x4",
                                             'acte_naissance' => 'Acte de naissance',
-                                            'releve_note' => 'Relever de notes',
+                                            'diplome_releve_notes' => 'Releve de notes',
                                             'demande_manuscrite'=>'Demande manuscrite',
                                             'carte_identite' => 'Carte d\'identite',
+
                                             default => 'Autre',
                                         },
                                     ])
                                 )
-                                ->required()
+                                // ->required()
                                 ->helperText('Cochez uniquement les documents que le candidat doit soumettre à nouveau.'),
 
                             Forms\Components\Textarea::make('motif_rejet')

@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import { motion } from 'framer-motion';
-
+import SafeHtml from '../common/SafeHtml';
 function DebouchesTab({ content }) {
   return (
     <Box>
